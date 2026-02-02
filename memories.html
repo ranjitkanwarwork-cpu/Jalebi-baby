@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Memories 📸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rose: #e8b4bc;
+            --deep-rose: #c77b8b;
+            --blush: #fdf2f4;
+            --burgundy: #722f37;
+            --gold: #d4a574;
+            --cream: #fef9f3;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0a0e 0%, #2d1318 30%, #1a0a0e 70%, #0d0507 100%);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            padding: 2rem;
+        }
+
+        /* Floating Hearts */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .heart-float {
+            position: absolute;
+            opacity: 0.3;
+            animation: floatHeart 15s infinite ease-in-out;
+        }
+
+        @keyframes floatHeart {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            color: var(--rose);
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            transform: translateX(-5px);
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 3rem;
+        }
+
+        /* Page Title */
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: var(--rose);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 40px rgba(232, 180, 188, 0.4);
+        }
+
+        .page-title p {
+            color: var(--cream);
+            opacity: 0.8;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, var(--rose), var(--rose), transparent);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: calc(50% + 30px);
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: calc(50% + 30px);
+        }
+
+        .timeline-item::after {
+            content: '💕';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            background: #1a0a0e;
+            padding: 0.5rem;
+            border-radius: 50%;
+        }
+
+        /* Memory Card */
+        .memory-card {
+            background: linear-gradient(145deg, rgba(45, 19, 24, 0.9), rgba(26, 10, 14, 0.95));
+            border: 1px solid rgba(232, 180, 188, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                0 0 60px rgba(232, 180, 188, 0.05);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .memory-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .memory-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(232, 180, 188, 0.1);
+        }
+
+        /* Photo Frame */
+        .photo-frame {
+            position: relative;
+            width: 100%;
+            padding-bottom: 75%;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(232, 180, 188, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .photo-frame img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .memory-card:hover .photo-frame img {
+            transform: scale(1.05);
+        }
+
+        .memory-date {
+            font-family: 'Dancing Script', cursive;
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .memory-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--cream);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .memory-description {
+            color: rgba(254, 249, 243, 0.7);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Countdown Section */
+        .countdown-section {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+        }
+
+        .countdown-title {
+            font-family: 'Dancing Script', cursive;
+            color: var(--rose);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: linear-gradient(145deg, rgba(45, 19, 24, 0.9), rgba(26, 10, 14, 0.95));
+            border: 1px solid rgba(232, 180, 188, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            min-width: 100px;
+        }
+
+        .countdown-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--rose);
+            display: block;
+        }
+
+        .countdown-label {
+            color: var(--cream);
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Relationship Stats */
+        .stats-section {
+            margin-top: 4rem;
+            padding: 2rem;
+        }
+
+        .stats-title {
+            font-family: 'Dancing Script', cursive;
+            color: var(--rose);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, rgba(45, 19, 24, 0.9), rgba(26, 10, 14, 0.95));
+            border: 1px solid rgba(232, 180, 188, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(232, 180, 188, 0.1);
+        }
+
+        .stat-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--rose);
+        }
+
+        .stat-label {
+            color: var(--cream);
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        /* Photo Gallery Section */
+        .gallery-section {
+            margin-top: 4rem;
+            padding: 2rem 0;
+        }
+
+        .gallery-title {
+            font-family: 'Dancing Script', cursive;
+            color: var(--rose);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 20px 40px rgba(232, 180, 188, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item::after {
+            content: '💕';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Final Message */
+        .final-message {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            background: rgba(232, 180, 188, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(232, 180, 188, 0.2);
+        }
+
+        .final-message p {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--cream);
+            font-style: italic;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .final-heart {
+            font-size: 3rem;
+            margin-top: 1.5rem;
+            animation: heartPulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                justify-content: flex-start;
+                padding-left: 60px;
+                padding-right: 0;
+            }
+
+            .timeline-item::after {
+                left: 20px;
+            }
+
+            .memory-card {
+                max-width: 100%;
+            }
+
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .photo-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <!-- Back Button -->
+    <a href="index.html" class="back-btn">← Back to Card</a>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>📸 Our Beautiful Memories</h1>
+            <p>A journey of love, captured in moments...</p>
+        </div>
+
+        <!-- Relationship Stats -->
+        <div class="stats-section">
+            <h2 class="stats-title">Our Love in Numbers 💕</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-emoji">💑</div>
+                    <div class="stat-number" id="daysTogether">0</div>
+                    <div class="stat-label">Days Together</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-emoji">🌙</div>
+                    <div class="stat-number" id="monthsTogether">0</div>
+                    <div class="stat-label">Months Together</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-emoji">💋</div>
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Kisses Shared</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-emoji">🤗</div>
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Hugs Given</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline with Photos -->
+        <div class="timeline">
+            <!-- Memory 1 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo1.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">April 10, 2024 ✨</div>
+                    <h3 class="memory-title">The Day We Became Us</h3>
+                    <p class="memory-description">
+                        The moment my heart found its home. This was the beginning of our beautiful story together.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 2 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo2.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Spring Days 🌸</div>
+                    <h3 class="memory-title">Our First Adventures</h3>
+                    <p class="memory-description">
+                        Every moment with you felt like magic. I knew from the start that you were someone special.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 3 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo3.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Making Memories 💕</div>
+                    <h3 class="memory-title">Falling Deeper</h3>
+                    <p class="memory-description">
+                        With every laugh we shared, every conversation we had, I fell more in love with you.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 4 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo4.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Summer Love ☀️</div>
+                    <h3 class="memory-title">Sunshine & Smiles</h3>
+                    <p class="memory-description">
+                        The warmth of summer couldn't compare to the warmth I feel when I'm with you.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 5 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo5.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Together Always 🥰</div>
+                    <h3 class="memory-title">My Favorite Person</h3>
+                    <p class="memory-description">
+                        No matter where we are or what we're doing, being with you is my favorite place to be.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 6 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo6.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Adventures Together 🗺️</div>
+                    <h3 class="memory-title">Exploring the World</h3>
+                    <p class="memory-description">
+                        Every adventure is better with you by my side. You make even the ordinary feel extraordinary.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 7 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo7.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Falling in Fall 🍂</div>
+                    <h3 class="memory-title">Cozy Moments</h3>
+                    <p class="memory-description">
+                        As the leaves changed colors, my love for you only grew stronger and more beautiful.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 8 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo8.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Special Moments ⭐</div>
+                    <h3 class="memory-title">Making Memories</h3>
+                    <p class="memory-description">
+                        Every photo we take is a treasure, but nothing compares to the memories we hold in our hearts.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 9 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo9.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Holiday Magic 🎄</div>
+                    <h3 class="memory-title">Celebrations With You</h3>
+                    <p class="memory-description">
+                        The holidays became so much more special because I got to spend them with you.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 10 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo10.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Winter Warmth ❄️</div>
+                    <h3 class="memory-title">Keeping Each Other Warm</h3>
+                    <p class="memory-description">
+                        Even on the coldest days, your love keeps me warm. You're my sunshine on cloudy days.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 11 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo11.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">New Year, Same Love 🎉</div>
+                    <h3 class="memory-title">Growing Together</h3>
+                    <p class="memory-description">
+                        With every passing day, I love you more than the day before. Our love keeps growing stronger.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 12 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo12.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Everyday Love 💝</div>
+                    <h3 class="memory-title">The Little Things</h3>
+                    <p class="memory-description">
+                        It's not just the big moments – it's the everyday moments with you that I treasure most.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 13 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo13.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Almost Our Anniversary 🌹</div>
+                    <h3 class="memory-title">One Year of Us</h3>
+                    <p class="memory-description">
+                        As we approach our first anniversary, I can't believe how lucky I am to have you in my life.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Memory 14 -->
+            <div class="timeline-item">
+                <div class="memory-card">
+                    <div class="photo-frame">
+                        <img src="images/photo14.jpeg" alt="Our Memory">
+                    </div>
+                    <div class="memory-date">Today & Forever 💍</div>
+                    <h3 class="memory-title">Our Continuing Story</h3>
+                    <p class="memory-description">
+                        This is just the beginning. I can't wait to create a lifetime of memories with you by my side.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Countdown to Valentine's Day -->
+        <div class="countdown-section">
+            <h2 class="countdown-title">⏰ Countdown to Valentine's Day</h2>
+            <div class="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">00</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="gallery-section">
+            <h2 class="gallery-title">📷 Our Photo Gallery</h2>
+            <div class="photo-gallery">
+                <div class="gallery-item"><img src="images/photo1.jpeg" alt="Memory 1"></div>
+                <div class="gallery-item"><img src="images/photo2.jpeg" alt="Memory 2"></div>
+                <div class="gallery-item"><img src="images/photo3.jpeg" alt="Memory 3"></div>
+                <div class="gallery-item"><img src="images/photo4.jpeg" alt="Memory 4"></div>
+                <div class="gallery-item"><img src="images/photo5.jpeg" alt="Memory 5"></div>
+                <div class="gallery-item"><img src="images/photo6.jpeg" alt="Memory 6"></div>
+                <div class="gallery-item"><img src="images/photo7.jpeg" alt="Memory 7"></div>
+                <div class="gallery-item"><img src="images/photo8.jpeg" alt="Memory 8"></div>
+                <div class="gallery-item"><img src="images/photo9.jpeg" alt="Memory 9"></div>
+                <div class="gallery-item"><img src="images/photo10.jpeg" alt="Memory 10"></div>
+                <div class="gallery-item"><img src="images/photo11.jpeg" alt="Memory 11"></div>
+                <div class="gallery-item"><img src="images/photo12.jpeg" alt="Memory 12"></div>
+                <div class="gallery-item"><img src="images/photo13.jpeg" alt="Memory 13"></div>
+                <div class="gallery-item"><img src="images/photo14.jpeg" alt="Memory 14"></div>
+            </div>
+        </div>
+
+        <!-- Final Message -->
+        <div class="final-message">
+            <p>
+                "From April 10, 2024, to forever – every moment with you has been a gift. 
+                Here's to many more years of love, laughter, and beautiful memories together."
+            </p>
+            <div class="final-heart">💝</div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        const heartsBg = document.getElementById('heartsBg');
+        const heartEmojis = ['💕', '💗', '💖', '💘', '❤️', '💝'];
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-float';
+            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heart.style.animationDuration = (Math.random() * 8 + 10) + 's';
+            heart.style.animationDelay = Math.random() * 3 + 's';
+            heartsBg.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 20000);
+        }
+
+        setInterval(createHeart, 1000);
+        for (let i = 0; i < 8; i++) createHeart();
+
+        // Animate memory cards on scroll
+        const memoryCards = document.querySelectorAll('.memory-card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, 200);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        memoryCards.forEach(card => observer.observe(card));
+
+        // Valentine's Day Countdown
+        function updateCountdown() {
+            const now = new Date();
+            const valentinesDay = new Date(now.getFullYear(), 1, 14); // February 14
+            
+            // If Valentine's Day has passed this year, countdown to next year
+            if (now > valentinesDay) {
+                valentinesDay.setFullYear(valentinesDay.getFullYear() + 1);
+            }
+            
+            const diff = valentinesDay - now;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Calculate days together - YOUR ANNIVERSARY: April 10, 2024
+        function calculateDaysTogether() {
+            const startDate = new Date('2024-04-10'); // April 10, 2024
+            const today = new Date();
+            const diffTime = Math.abs(today - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const diffMonths = Math.floor(diffDays / 30.44); // Average days per month
+            
+            document.getElementById('daysTogether').textContent = diffDays.toLocaleString();
+            document.getElementById('monthsTogether').textContent = diffMonths;
+        }
+
+        calculateDaysTogether();
+    </script>
+</body>
+</html>
