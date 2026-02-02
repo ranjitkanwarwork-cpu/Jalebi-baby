@@ -81,6 +81,31 @@
             transform: translateX(-5px);
         }
 
+        /* Music Control Button */
+        .music-control {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(232, 180, 188, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
         /* Main Container */
         .container {
             position: relative;
@@ -439,6 +464,16 @@
     </style>
 </head>
 <body>
+    <!-- ============================================== -->
+    <!-- 🎵 BACKGROUND MUSIC                           -->
+    <!-- ============================================== -->
+    <audio id="bgMusic" loop>
+        <source src="Prateek Kuhad - Kuch Din.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Control Button -->
+    <button class="music-control" id="musicBtn" onclick="toggleMusic()">🔇</button>
+
     <!-- Floating Hearts Background -->
     <div class="hearts-bg" id="heartsBg"></div>
 
@@ -806,6 +841,36 @@
         }
 
         calculateDaysTogether();
+
+        // Background Music Control
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicBtn.textContent = '🔇';
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play();
+                musicBtn.textContent = '🔊';
+                isMusicPlaying = true;
+            }
+        }
+
+        // Auto-play attempt on first interaction
+        document.addEventListener('click', function initAudio() {
+            if (!isMusicPlaying) {
+                bgMusic.play().then(() => {
+                    musicBtn.textContent = '🔊';
+                    isMusicPlaying = true;
+                }).catch(() => {
+                    // Autoplay blocked, user needs to click music button
+                });
+            }
+            document.removeEventListener('click', initAudio);
+        }, { once: true });
     </script>
 </body>
 </html>
