@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Letter For You 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rose: #e8b4bc;
+            --deep-rose: #c77b8b;
+            --blush: #fdf2f4;
+            --burgundy: #722f37;
+            --gold: #d4a574;
+            --cream: #fef9f3;
+            --paper: #fefbf6;
+            --ink: #2d1318;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0a0e 0%, #2d1318 30%, #1a0a0e 70%, #0d0507 100%);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            padding: 2rem;
+        }
+
+        /* Floating Rose Petals */
+        .petals-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.6;
+            animation: fall 10s infinite ease-in-out;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% {
+                transform: translateY(100vh) rotate(360deg) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            color: var(--rose);
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            transform: translateX(-5px);
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 3rem;
+        }
+
+        /* Page Title */
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: var(--rose);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 40px rgba(232, 180, 188, 0.4);
+        }
+
+        /* Envelope Animation */
+        .envelope-container {
+            perspective: 1000px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .envelope {
+            width: 120px;
+            height: 80px;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.1);
+        }
+
+        .envelope-body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, var(--deep-rose), var(--burgundy));
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            animation: heartPulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* Letter Paper */
+        .letter {
+            background: var(--paper);
+            border-radius: 5px;
+            padding: 3rem;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(0,0,0,0.05),
+                inset 0 0 80px rgba(232, 180, 188, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Paper texture */
+        .letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* Red margin line */
+        .letter::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 60px;
+            width: 2px;
+            height: 100%;
+            background: rgba(199, 123, 139, 0.3);
+        }
+
+        /* Letter Header */
+        .letter-header {
+            text-align: right;
+            margin-bottom: 2rem;
+            padding-right: 1rem;
+        }
+
+        .letter-date {
+            font-family: 'Caveat', cursive;
+            color: var(--ink);
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        /* Letter Greeting */
+        .letter-greeting {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--burgundy);
+            margin-bottom: 1.5rem;
+            margin-left: 2rem;
+        }
+
+        /* Letter Body */
+        .letter-body {
+            font-family: 'Caveat', cursive;
+            font-size: 1.4rem;
+            color: var(--ink);
+            line-height: 2;
+            margin-left: 2rem;
+        }
+
+        .letter-body p {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .letter-body p:nth-child(1) { animation-delay: 0.3s; }
+        .letter-body p:nth-child(2) { animation-delay: 0.6s; }
+        .letter-body p:nth-child(3) { animation-delay: 0.9s; }
+        .letter-body p:nth-child(4) { animation-delay: 1.2s; }
+        .letter-body p:nth-child(5) { animation-delay: 1.5s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Highlight */
+        .highlight {
+            background: linear-gradient(180deg, transparent 60%, rgba(232, 180, 188, 0.4) 60%);
+            padding: 0 4px;
+        }
+
+        /* Letter Closing */
+        .letter-closing {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: var(--burgundy);
+            text-align: right;
+            margin-top: 2rem;
+            padding-right: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 1.8s;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--deep-rose);
+            margin-top: 0.5rem;
+        }
+
+        /* Lipstick Kiss */
+        .kiss-mark {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            font-size: 3rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: 2.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Reasons Section */
+        .reasons-section {
+            margin-top: 3rem;
+        }
+
+        .reasons-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--rose);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .reason-card {
+            background: linear-gradient(145deg, rgba(45, 19, 24, 0.9), rgba(26, 10, 14, 0.95));
+            border: 1px solid rgba(232, 180, 188, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .reason-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reason-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(232, 180, 188, 0.15);
+        }
+
+        .reason-number {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--rose);
+            opacity: 0.5;
+        }
+
+        .reason-text {
+            color: var(--cream);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+
+        .reason-emoji {
+            font-size: 2rem;
+            margin-top: 1rem;
+        }
+
+        /* Final Message */
+        .final-message {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(232, 180, 188, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(232, 180, 188, 0.2);
+        }
+
+        .final-message p {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--cream);
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        .final-heart {
+            font-size: 3rem;
+            margin-top: 1rem;
+            animation: heartPulse 1.5s infinite ease-in-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .letter {
+                padding: 2rem 1.5rem;
+            }
+
+            .letter::after {
+                left: 30px;
+            }
+
+            .letter-greeting,
+            .letter-body {
+                margin-left: 1rem;
+            }
+
+            .letter-body {
+                font-size: 1.2rem;
+            }
+
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Petals -->
+    <div class="petals-container" id="petals"></div>
+
+    <!-- Back Button -->
+    <a href="index.html" class="back-btn">← Back to Card</a>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>💌 A Letter From My Heart</h1>
+        </div>
+
+        <!-- Envelope -->
+        <div class="envelope-container">
+            <div class="envelope open">
+                <div class="envelope-body"></div>
+                <div class="envelope-flap"></div>
+                <span class="envelope-heart">💕</span>
+            </div>
+        </div>
+
+        <!-- Letter -->
+        <div class="letter">
+            <div class="letter-header">
+                <span class="letter-date">Valentine's Day, 2025</span>
+            </div>
+
+            <div class="letter-greeting">My Dearest Love,</div>
+
+            <div class="letter-body">
+                <p>
+                    From the moment you walked into my life, everything changed. 
+                    The colors became brighter, the music sounded sweeter, and 
+                    my heart found its <span class="highlight">forever home</span>.
+                </p>
+
+                <p>
+                    Every day with you feels like a beautiful dream that I never 
+                    want to wake up from. Your smile is my sunrise, your laugh 
+                    is my favorite melody, and your love is the greatest gift 
+                    I've ever received.
+                </p>
+
+                <p>
+                    I love the way you scrunch your nose when you laugh. I love 
+                    how passionate you get about the things you care about. I love 
+                    the way you make even ordinary moments feel <span class="highlight">extraordinary</span>.
+                </p>
+
+                <p>
+                    Thank you for choosing me. Thank you for loving me with all 
+                    my imperfections. Thank you for being my best friend, my 
+                    confidant, and my greatest adventure.
+                </p>
+
+                <p>
+                    This Valentine's Day and every day after, I promise to love 
+                    you more than yesterday and less than tomorrow. You are my 
+                    everything, and I am so grateful you're mine.
+                </p>
+            </div>
+
+            <div class="letter-closing">
+                Forever & Always Yours,
+                <div class="signature">[Your Name]</div>
+            </div>
+
+            <span class="kiss-mark">💋</span>
+        </div>
+
+        <!-- Reasons Section -->
+        <div class="reasons-section">
+            <h2 class="reasons-title">✨ 10 Reasons I Love You ✨</h2>
+            
+            <div class="reasons-grid">
+                <div class="reason-card">
+                    <span class="reason-number">1</span>
+                    <p class="reason-text">Your beautiful smile that lights up every room</p>
+                    <span class="reason-emoji">😊</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">2</span>
+                    <p class="reason-text">The way you always know how to make me laugh</p>
+                    <span class="reason-emoji">😂</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">3</span>
+                    <p class="reason-text">Your kindness and compassion for everyone</p>
+                    <span class="reason-emoji">💖</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">4</span>
+                    <p class="reason-text">How you support me in everything I do</p>
+                    <span class="reason-emoji">🤝</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">5</span>
+                    <p class="reason-text">The comfort I feel just being near you</p>
+                    <span class="reason-emoji">🥰</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">6</span>
+                    <p class="reason-text">Your amazing taste in music and movies</p>
+                    <span class="reason-emoji">🎵</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">7</span>
+                    <p class="reason-text">The deep conversations we have at midnight</p>
+                    <span class="reason-emoji">🌙</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">8</span>
+                    <p class="reason-text">How you make me want to be a better person</p>
+                    <span class="reason-emoji">⭐</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">9</span>
+                    <p class="reason-text">The way your eyes sparkle when you're excited</p>
+                    <span class="reason-emoji">✨</span>
+                </div>
+                <div class="reason-card">
+                    <span class="reason-number">10</span>
+                    <p class="reason-text">Simply because you're YOU - perfectly imperfect</p>
+                    <span class="reason-emoji">💕</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Message -->
+        <div class="final-message">
+            <p>
+                "In a sea of people, my eyes will always search for you. 
+                In a world full of choices, I will always choose you. 
+                Today, tomorrow, and for all the days to come."
+            </p>
+            <div class="final-heart">💝</div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating petals
+        const petalsContainer = document.getElementById('petals');
+        const petalEmojis = ['🌸', '🌺', '🏵️', '💮', '🌹'];
+        
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            petal.style.animationDuration = (Math.random() * 5 + 8) + 's';
+            petal.style.animationDelay = Math.random() * 2 + 's';
+            petalsContainer.appendChild(petal);
+            
+            setTimeout(() => petal.remove(), 15000);
+        }
+
+        setInterval(createPetal, 600);
+        for (let i = 0; i < 10; i++) createPetal();
+
+        // Animate reason cards on scroll
+        const reasonCards = document.querySelectorAll('.reason-card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        reasonCards.forEach(card => observer.observe(card));
+
+        // Envelope click interaction
+        document.querySelector('.envelope').addEventListener('click', function() {
+            this.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
