@@ -117,6 +117,31 @@
             transform: translateX(-5px);
         }
 
+        /* Music Control Button */
+        .music-control {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(232, 180, 188, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
         /* Page Title */
         .page-title {
             text-align: center;
@@ -189,7 +214,7 @@
             margin-bottom: 1.5rem;
         }
 
-        /* QR Code Section */
+        /* QR Code Section - SCAN ONLY, NO CLICK */
         .qr-container {
             background: white;
             padding: 1.5rem;
@@ -197,7 +222,6 @@
             display: inline-block;
             margin: 1rem 0;
             position: relative;
-            cursor: pointer;
             transition: all 0.3s ease;
         }
 
@@ -212,34 +236,11 @@
             display: block;
         }
 
-        .qr-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(232, 180, 188, 0.9);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 0.5rem;
-            transition: opacity 0.3s ease;
-        }
-
-        .qr-container:hover .qr-overlay {
-            opacity: 0;
-        }
-
-        .qr-overlay span {
-            color: white;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-        }
-
-        .qr-overlay .icon {
-            font-size: 2rem;
+        .scan-instruction {
+            margin-top: 1rem;
+            color: var(--rose);
+            font-size: 0.9rem;
+            font-style: italic;
         }
 
         /* Vinyl Record Animation */
@@ -282,28 +283,6 @@
             animation-play-state: paused;
         }
 
-        /* Play Button */
-        .play-btn {
-            background: linear-gradient(135deg, var(--rose), var(--deep-rose));
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .play-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(232, 180, 188, 0.4);
-        }
-
         /* Song Info */
         .song-info {
             margin-top: 1.5rem;
@@ -323,6 +302,44 @@
             font-size: 1rem;
         }
 
+        /* Now Playing */
+        .now-playing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            color: var(--rose);
+            font-size: 0.9rem;
+        }
+
+        .now-playing .bars {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            height: 20px;
+        }
+
+        .now-playing .bar {
+            width: 4px;
+            background: var(--rose);
+            animation: soundBar 0.5s ease-in-out infinite alternate;
+        }
+
+        .now-playing .bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .now-playing .bar:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+        .now-playing .bar:nth-child(3) { height: 12px; animation-delay: 0.2s; }
+        .now-playing .bar:nth-child(4) { height: 18px; animation-delay: 0.3s; }
+
+        @keyframes soundBar {
+            0% { transform: scaleY(0.5); }
+            100% { transform: scaleY(1); }
+        }
+
+        .now-playing.paused .bar {
+            animation-play-state: paused;
+        }
+
         /* Message */
         .love-message {
             background: rgba(232, 180, 188, 0.1);
@@ -340,13 +357,6 @@
             line-height: 1.8;
         }
 
-        /* Spotify Embed Container */
-        .spotify-embed {
-            margin-top: 1.5rem;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
         /* Responsive */
         @media (max-width: 600px) {
             .cards-grid {
@@ -361,10 +371,25 @@
                 top: 1rem;
                 left: 1rem;
             }
+
+            .music-control {
+                top: 1rem;
+                right: 1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- ============================================== -->
+    <!-- 🎵 BACKGROUND MUSIC - AUTO PLAYS              -->
+    <!-- ============================================== -->
+    <audio id="bgMusic" loop>
+        <source src="Prateek Kuhad - Kuch Din.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Control Button -->
+    <button class="music-control" id="musicBtn" onclick="toggleMusic()">🔇</button>
+
     <!-- Vinyl Background -->
     <div class="vinyl-bg"></div>
 
@@ -381,70 +406,22 @@
         </div>
 
         <div class="cards-grid">
-            <!-- QR Code Card -->
+            <!-- QR Code Card - SCAN ONLY -->
             <div class="card">
                 <span class="card-icon">📱</span>
                 <h2>Scan to Listen</h2>
-                <p>Scan this QR code to hear the song that makes me think of you</p>
+                <p>Scan this QR code with your phone camera to hear our song on Spotify/YouTube</p>
                 
-                <div class="qr-container" onclick="window.open('YOUR_SPOTIFY_OR_YOUTUBE_LINK', '_blank')">
-                    <div class="qr-overlay">
-                        <span class="icon">🎵</span>
-                        <span>Tap or Scan</span>
-                    </div>
-                    <!-- QR Code - Replace with your actual QR code image -->
-                    <!-- Generate at: https://www.qr-code-generator.com/ -->
+                <!-- QR CODE - NO ONCLICK, SCAN ONLY -->
+                <div class="qr-container">
                     <img class="qr-code" src="qr-code.png" alt="Scan for song">
-                        <!-- Placeholder QR pattern - replace with actual QR -->
-                        <rect fill="#ffffff" width="100" height="100"/>
-                        <g fill="#1a0a0e">
-                            <!-- Corner squares -->
-                            <rect x="5" y="5" width="25" height="25"/>
-                            <rect fill="#fff" x="8" y="8" width="19" height="19"/>
-                            <rect x="11" y="11" width="13" height="13"/>
-                            
-                            <rect x="70" y="5" width="25" height="25"/>
-                            <rect fill="#fff" x="73" y="8" width="19" height="19"/>
-                            <rect x="76" y="11" width="13" height="13"/>
-                            
-                            <rect x="5" y="70" width="25" height="25"/>
-                            <rect fill="#fff" x="8" y="73" width="19" height="19"/>
-                            <rect x="11" y="76" width="13" height="13"/>
-                            
-                            <!-- Data pattern (simplified) -->
-                            <rect x="35" y="5" width="5" height="5"/>
-                            <rect x="45" y="5" width="5" height="5"/>
-                            <rect x="55" y="5" width="5" height="5"/>
-                            <rect x="35" y="15" width="5" height="5"/>
-                            <rect x="50" y="15" width="5" height="5"/>
-                            <rect x="60" y="15" width="5" height="5"/>
-                            
-                            <!-- Heart in center -->
-                            <text x="50" y="55" text-anchor="middle" font-size="15">♥</text>
-                            
-                            <rect x="35" y="35" width="5" height="5"/>
-                            <rect x="60" y="35" width="5" height="5"/>
-                            <rect x="35" y="60" width="5" height="5"/>
-                            <rect x="60" y="60" width="5" height="5"/>
-                            
-                            <rect x="70" y="35" width="5" height="5"/>
-                            <rect x="80" y="45" width="5" height="5"/>
-                            <rect x="75" y="55" width="5" height="5"/>
-                            <rect x="85" y="65" width="5" height="5"/>
-                            
-                            <rect x="35" y="80" width="5" height="5"/>
-                            <rect x="45" y="75" width="5" height="5"/>
-                            <rect x="55" y="85" width="5" height="5"/>
-                            <rect x="65" y="80" width="5" height="5"/>
-                            <rect x="75" y="75" width="5" height="5"/>
-                            <rect x="85" y="85" width="5" height="5"/>
-                        </g>
-                    </svg>
                 </div>
+                
+                <p class="scan-instruction">📷 Use your phone camera to scan</p>
 
                 <div class="song-info">
-                    <div class="song-title">"Your Song Title Here"</div>
-                    <div class="song-artist">by Artist Name</div>
+                    <div class="song-title">"Kuch Din"</div>
+                    <div class="song-artist">by Prateek Kuhad</div>
                 </div>
             </div>
 
@@ -455,10 +432,16 @@
                 
                 <div class="vinyl-record" id="vinyl"></div>
                 
-                <button class="play-btn" onclick="togglePlay()">
-                    <span id="playIcon">▶</span>
-                    <span id="playText">Play Preview</span>
-                </button>
+                <!-- Now Playing Indicator -->
+                <div class="now-playing" id="nowPlaying">
+                    <div class="bars">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <span>Now Playing</span>
+                </div>
 
                 <div class="love-message">
                     <p>
@@ -467,32 +450,9 @@
                         I hope whenever you hear it, you'll think of us. 💕"
                     </p>
                 </div>
-
-                <!-- Optional: Spotify Embed -->
-                <!-- Replace with your Spotify embed code -->
-                <!--
-                <div class="spotify-embed">
-                    <iframe 
-                        style="border-radius:12px" 
-                        src="https://open.spotify.com/embed/track/YOUR_TRACK_ID?utm_source=generator&theme=0" 
-                        width="100%" 
-                        height="80" 
-                        frameBorder="0" 
-                        allowfullscreen="" 
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                        loading="lazy">
-                    </iframe>
-                </div>
-                -->
             </div>
         </div>
     </div>
-
-    <!-- Hidden Audio (Optional - for preview) -->
-    <audio id="songPreview" loop>
-        <!-- Add your audio file here -->
-        <!-- <source src="your-song-preview.mp3" type="audio/mpeg"> -->
-    </audio>
 
     <script>
         // Create floating music notes
@@ -515,32 +475,47 @@
         setInterval(createNote, 800);
         for (let i = 0; i < 8; i++) createNote();
 
-        // Vinyl play/pause
+        // Background Music Control
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
         const vinyl = document.getElementById('vinyl');
-        const audio = document.getElementById('songPreview');
-        const playIcon = document.getElementById('playIcon');
-        const playText = document.getElementById('playText');
-        let isPlaying = false;
+        const nowPlaying = document.getElementById('nowPlaying');
+        let isMusicPlaying = false;
 
-        function togglePlay() {
-            isPlaying = !isPlaying;
-            if (isPlaying) {
-                vinyl.classList.remove('paused');
-                playIcon.textContent = '⏸';
-                playText.textContent = 'Pause';
-                audio.play().catch(() => {
-                    // Audio not available, just animate
-                });
-            } else {
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicBtn.textContent = '🔇';
                 vinyl.classList.add('paused');
-                playIcon.textContent = '▶';
-                playText.textContent = 'Play Preview';
-                audio.pause();
+                nowPlaying.classList.add('paused');
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play();
+                musicBtn.textContent = '🔊';
+                vinyl.classList.remove('paused');
+                nowPlaying.classList.remove('paused');
+                isMusicPlaying = true;
             }
         }
 
-        // Start with vinyl paused
+        // Start with music paused (user needs to click to play)
         vinyl.classList.add('paused');
+        nowPlaying.classList.add('paused');
+
+        // Auto-play attempt (may be blocked by browser)
+        document.addEventListener('click', function initAudio() {
+            if (!isMusicPlaying) {
+                bgMusic.play().then(() => {
+                    musicBtn.textContent = '🔊';
+                    vinyl.classList.remove('paused');
+                    nowPlaying.classList.remove('paused');
+                    isMusicPlaying = true;
+                }).catch(() => {
+                    // Autoplay blocked, user needs to click music button
+                });
+            }
+            document.removeEventListener('click', initAudio);
+        }, { once: true });
     </script>
 </body>
 </html>
