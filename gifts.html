@@ -121,7 +121,7 @@
 
         .gift-inner {
             position: relative;
-            height: 350px;
+            height: 380px;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
         }
@@ -266,27 +266,6 @@
             max-width: 100%;
         }
 
-        /* Special Gift Styles */
-        .gift-action-btn {
-            margin-top: 1rem;
-            background: linear-gradient(135deg, var(--rose), var(--deep-rose));
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 25px;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .gift-action-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(232, 180, 188, 0.4);
-        }
-
         /* Coupon Style */
         .coupon {
             background: linear-gradient(135deg, #fef9f3, #fdf2f4);
@@ -380,7 +359,7 @@
             }
 
             .gift-inner {
-                height: 320px;
+                height: 360px;
             }
 
             .back-btn {
@@ -391,16 +370,6 @@
     </style>
 </head>
 <body>
-    <!-- ============================================== -->
-    <!-- 🎵 OPTIONAL: ADD BACKGROUND MUSIC HERE        -->
-    <!-- Uncomment the lines below and add your mp3    -->
-    <!-- ============================================== -->
-    <!-- 
-    <audio autoplay loop>
-        <source src="romantic-music.mp3" type="audio/mpeg">
-    </audio>
-    -->
-
     <!-- Sparkles -->
     <div class="sparkles" id="sparkles"></div>
 
@@ -416,7 +385,7 @@
         <div class="gifts-grid">
 
             <!-- ============================================== -->
-            <!-- 🎁 GIFT 1 - EDIT BELOW!                       -->
+            <!-- 🎁 GIFT 1 - FREE MASSAGE                      -->
             <!-- ============================================== -->
             <div class="gift-box" onclick="openGift(this)">
                 <div class="gift-inner">
@@ -428,28 +397,24 @@
                         <span class="gift-label">Gift #1</span>
                     </div>
                     <div class="gift-back">
-                        <div class="flower-bouquet">
-                            <span>🌹</span>
-                            <span>🌸</span>
-                            <span>💐</span>
-                            <span>🌸</span>
-                            <span>🌹</span>
-                        </div>
-                        <!-- ===== EDIT GIFT 1 CONTENT ===== -->
-                        <div class="gift-icon">[EMOJI: e.g., 💐]</div>
-                        <h3 class="gift-title">[GIFT 1 TITLE: e.g., "A Bouquet For You"]</h3>
+                        <div class="gift-icon">💆‍♀️</div>
+                        <h3 class="gift-title">Free Massage</h3>
                         <p class="gift-description">
-                            [GIFT 1 DESCRIPTION: e.g., "A beautiful bouquet of your favorite flowers is waiting for you!"]
+                            Relax and let me take care of you with a soothing massage whenever you need it!
                         </p>
+                        <div class="coupon">
+                            <div class="coupon-title">💆 Relaxation Voucher</div>
+                            <div class="coupon-value">Unlimited uses • No expiration</div>
+                        </div>
                         <div class="gift-message">
-                            "[GIFT 1 PERSONAL MESSAGE: e.g., "Every flower reminds me of your beauty. I hope these brighten your day as much as you brighten mine."]"
+                            "Because you deserve to feel pampered and loved. Just say the word and I'll melt your stress away! 🥰"
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- ============================================== -->
-            <!-- 🎁 GIFT 2 - EDIT BELOW!                       -->
+            <!-- 🎁 GIFT 2 - COFFEE DATE                       -->
             <!-- ============================================== -->
             <div class="gift-box" onclick="openGift(this)">
                 <div class="gift-inner">
@@ -461,25 +426,24 @@
                         <span class="gift-label">Gift #2</span>
                     </div>
                     <div class="gift-back">
-                        <!-- ===== EDIT GIFT 2 CONTENT ===== -->
-                        <div class="gift-icon">[EMOJI: e.g., 🍽️]</div>
-                        <h3 class="gift-title">[GIFT 2 TITLE: e.g., "Romantic Dinner Date"]</h3>
+                        <div class="gift-icon">☕</div>
+                        <h3 class="gift-title">Coffee Date</h3>
                         <p class="gift-description">
-                            [GIFT 2 DESCRIPTION: e.g., "An evening at your favorite restaurant, just the two of us."]
+                            Let's grab your favorite coffee and spend quality time together at our favorite café!
                         </p>
                         <div class="coupon">
-                            <div class="coupon-title">[COUPON TITLE: e.g., "🎟️ Reservation Voucher"]</div>
-                            <div class="coupon-value">[COUPON DETAILS: e.g., "Valid: Valentine's Day 2025"]</div>
+                            <div class="coupon-title">☕ Caffeine & Cuddles Pass</div>
+                            <div class="coupon-value">Your drink is on me! • Any café you choose</div>
                         </div>
                         <div class="gift-message">
-                            "[GIFT 2 PERSONAL MESSAGE: e.g., "I want to spend an unforgettable evening with you. Get ready for a night to remember!"]"
+                            "Nothing beats a cozy coffee date with you. Let's talk, laugh, and just enjoy being together! 💕"
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- ============================================== -->
-            <!-- 🎁 GIFT 3 - LOVE COUPONS - EDIT BELOW!        -->
+            <!-- 🎁 GIFT 3 - HANDMADE FLOWER BOUQUET            -->
             <!-- ============================================== -->
             <div class="gift-box" onclick="openGift(this)">
                 <div class="gift-inner">
@@ -491,33 +455,27 @@
                         <span class="gift-label">Gift #3</span>
                     </div>
                     <div class="gift-back">
-                        <!-- ===== EDIT GIFT 3 CONTENT ===== -->
-                        <div class="gift-icon">[EMOJI: e.g., 🎟️]</div>
-                        <h3 class="gift-title">[GIFT 3 TITLE: e.g., "Love Coupons"]</h3>
+                        <div class="flower-bouquet">
+                            <span>🌹</span>
+                            <span>🌸</span>
+                            <span>💐</span>
+                            <span>🌸</span>
+                            <span>🌹</span>
+                        </div>
+                        <div class="gift-icon">💐</div>
+                        <h3 class="gift-title">Handmade Flower Bouquet</h3>
                         <p class="gift-description">
-                            [GIFT 3 DESCRIPTION: e.g., "Special coupons you can redeem anytime!"]
+                            A beautiful bouquet made with my own hands, just for you. Every flower chosen with love!
                         </p>
-                        <!-- COUPON 1 -->
-                        <div class="coupon">
-                            <div class="coupon-title">[COUPON 1: e.g., "💆 One Free Massage"]</div>
-                            <div class="coupon-value">[VALIDITY: e.g., "No expiration"]</div>
-                        </div>
-                        <!-- COUPON 2 -->
-                        <div class="coupon">
-                            <div class="coupon-title">[COUPON 2: e.g., "🎬 Movie Night (Your Pick!)"]</div>
-                            <div class="coupon-value">[VALIDITY: e.g., "Includes snacks"]</div>
-                        </div>
-                        <!-- COUPON 3 -->
-                        <div class="coupon">
-                            <div class="coupon-title">[COUPON 3: e.g., "☕ Breakfast in Bed"]</div>
-                            <div class="coupon-value">[VALIDITY: e.g., "Any morning you want"]</div>
+                        <div class="gift-message">
+                            "I wanted to give you something from my heart. Each flower represents how much you mean to me. Made with love, just for my love! 🌹💕"
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- ============================================== -->
-            <!-- 🎁 GIFT 4 - EDIT BELOW!                       -->
+            <!-- 🎁 GIFT 4 - MOVIE DATE AT AMC SOUTH LAKE      -->
             <!-- ============================================== -->
             <div class="gift-box" onclick="openGift(this)">
                 <div class="gift-inner">
@@ -529,23 +487,24 @@
                         <span class="gift-label">Gift #4</span>
                     </div>
                     <div class="gift-back">
-                        <!-- ===== EDIT GIFT 4 CONTENT ===== -->
-                        <div class="gift-icon">[EMOJI: e.g., ✈️]</div>
-                        <h3 class="gift-title">[GIFT 4 TITLE: e.g., "Adventure Awaits!"]</h3>
+                        <div class="gift-icon">🎬</div>
+                        <h3 class="gift-title">Movie Date Night</h3>
                         <p class="gift-description">
-                            [GIFT 4 DESCRIPTION: e.g., "A surprise trip or adventure planned just for us!"]
+                            Let's watch a movie together at AMC South Lake! Popcorn, snacks, and cuddles included.
                         </p>
-                        <div class="gift-message">
-                            "[GIFT 4 PERSONAL MESSAGE: e.g., "I want to create new memories with you. Pack your bags for a surprise adventure! 🗺️"]"
+                        <div class="coupon">
+                            <div class="coupon-title">🎟️ Movie Night for Two</div>
+                            <div class="coupon-value">AMC South Lake • Any movie you want!</div>
                         </div>
-                        <!-- OPTIONAL: Add a button link -->
-                        <!-- <a href="#" class="gift-action-btn">Reveal Destination 🌟</a> -->
+                        <div class="gift-message">
+                            "Pick any movie – rom-com, thriller, whatever makes you happy! I just want to hold your hand in the dark and share popcorn with you. 🍿❤️"
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- ============================================== -->
-            <!-- 🎁 GIFT 5 - EDIT BELOW!                       -->
+            <!-- 🎁 GIFT 5 - BREAKFAST IN BED                  -->
             <!-- ============================================== -->
             <div class="gift-box" onclick="openGift(this)">
                 <div class="gift-inner">
@@ -557,22 +516,24 @@
                         <span class="gift-label">Gift #5</span>
                     </div>
                     <div class="gift-back">
-                        <!-- ===== EDIT GIFT 5 CONTENT ===== -->
-                        <div class="gift-icon">[EMOJI: e.g., 💌]</div>
-                        <h3 class="gift-title">[GIFT 5 TITLE: e.g., "A Real Card"]</h3>
+                        <div class="gift-icon">🥞</div>
+                        <h3 class="gift-title">Breakfast in Bed</h3>
                         <p class="gift-description">
-                            [GIFT 5 DESCRIPTION: e.g., "A handwritten card with all my feelings, waiting for you in person."]
+                            Wake up to your favorite breakfast served right to you in bed! Pancakes, eggs, or whatever your heart desires.
                         </p>
-                        <div class="gift-message">
-                            "[GIFT 5 PERSONAL MESSAGE: e.g., "Some things are too precious to be digital. I've written you a real letter by hand, sealed with a kiss. 💋"]"
+                        <div class="coupon">
+                            <div class="coupon-title">🍳 Royal Morning Treatment</div>
+                            <div class="coupon-value">Redeemable any morning • Chef's special!</div>
                         </div>
-                        <a href="letter.html" class="gift-action-btn">Read Digital Preview →</a>
+                        <div class="gift-message">
+                            "You deserve to wake up feeling like royalty! Just text me the night before and I'll make your morning magical. 👑☀️"
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- ============================================== -->
-            <!-- 🎁 GIFT 6 - EDIT BELOW!                       -->
+            <!-- 🎁 GIFT 6 - ONE DAY OF "YES"                  -->
             <!-- ============================================== -->
             <div class="gift-box" onclick="openGift(this)">
                 <div class="gift-inner">
@@ -584,14 +545,17 @@
                         <span class="gift-label">Gift #6</span>
                     </div>
                     <div class="gift-back">
-                        <!-- ===== EDIT GIFT 6 CONTENT ===== -->
-                        <div class="gift-icon">[EMOJI: e.g., 💍]</div>
-                        <h3 class="gift-title">[GIFT 6 TITLE: e.g., "My Promise To You"]</h3>
+                        <div class="gift-icon">✨</div>
+                        <h3 class="gift-title">One Day of "YES!"</h3>
                         <p class="gift-description">
-                            [GIFT 6 DESCRIPTION: e.g., "The most precious gift I can give..."]
+                            For one whole day, I'll say YES to anything you want! Shopping, food, activities – you're the boss!
                         </p>
+                        <div class="coupon">
+                            <div class="coupon-title">👑 Your Wish is My Command</div>
+                            <div class="coupon-value">24 hours of YES • Use wisely 😉</div>
+                        </div>
                         <div class="gift-message">
-                            "[GIFT 6 PERSONAL MESSAGE: e.g., "I promise to love you, cherish you, make you laugh, dry your tears, be your best friend, and stand by your side through everything. Forever and always. 💕"]"
+                            "Want to go shopping? YES! Want me to watch that show with you? YES! Want ice cream at midnight? YES! It's all about YOU, baby! 💖"
                         </div>
                     </div>
                 </div>
