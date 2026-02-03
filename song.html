@@ -384,7 +384,7 @@
     <!-- 🎵 BACKGROUND MUSIC - AUTO PLAYS              -->
     <!-- ============================================== -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="./Mere-Laila.mp3" type="audio/mpeg">
+        <source src="Prateek%20Kuhad%20-%20Kuch%20Din.mp3" type="audio/mpeg">
     </audio>
 
 
@@ -484,18 +484,19 @@
         let isMusicPlaying = false;
 
         function toggleMusic() {
-            if (isMusicPlaying) {
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    musicBtn.textContent = '🔊';
+                    if(vinyl) vinyl.classList.remove('paused');
+                    if(nowPlaying) nowPlaying.classList.remove('paused');
+                    isMusicPlaying = true;
+                }).catch(err => console.log("Safari blocked autoplay. Click again."));
+            } else {
                 bgMusic.pause();
                 musicBtn.textContent = '🔇';
-                vinyl.classList.add('paused');
-                nowPlaying.classList.add('paused');
+                if(vinyl) vinyl.classList.add('paused');
+                if(nowPlaying) nowPlaying.classList.add('paused');
                 isMusicPlaying = false;
-            } else {
-                bgMusic.play();
-                musicBtn.textContent = '🔊';
-                vinyl.classList.remove('paused');
-                nowPlaying.classList.remove('paused');
-                isMusicPlaying = true;
             }
         }
 
