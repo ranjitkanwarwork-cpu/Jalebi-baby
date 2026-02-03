@@ -1,234 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Why You’re My Favorite Person 💗</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-        :root {
-            --rose: #e8b4bc;
-            --deep-rose: #c77b8b;
-            --burgundy: #722f37;
-            --cream: #fef9f3;
-            --ink: #2d1318;
-        }
-    
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1a0a0e 0%, #2d1318 30%, #1a0a0e 70%, #0d0507 100%);
-            font-family: 'Cormorant Garamond', serif;
-            overflow-x: hidden;
-            padding: 2rem 1rem; /* ⬅ reduced side padding */
-        }
-    
-        /* Back Button */
-        .back-btn {
-            position: fixed;
-            top: 1.5rem;
-            left: 1.5rem;
-            z-index: 100;
-            color: var(--rose);
-            text-decoration: none;
-            font-size: 1rem;
-            opacity: 0.75;
-            transition: 0.3s;
-        }
-    
-        .back-btn:hover {
-            opacity: 1;
-            transform: translateX(-5px);
-        }
-    
-        /* Music Button – TOP RIGHT */
-        .music-controls {
-            position: fixed;
-            top: 1.2rem;
-            right: 1.5rem;
-            z-index: 100;
-        }
-    
-        #musicToggle {
-            background: rgba(45, 19, 24, 0.85);
-            border: 2px solid var(--rose);
-            color: var(--rose);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.3rem;
-            transition: all 0.3s ease;
-        }
-    
-        #musicToggle:hover {
-            transform: scale(1.1);
-        }
-    
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-        }
-    
-        /* Envelope */
-        .envelope-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 3rem;
-            perspective: 1000px; /* ⬅ FIXED flip realism */
-        }
-    
-        /* Reasons Grid – FIXED ALIGNMENT */
-        .reasons-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-            justify-items: center; /* ⬅ keeps cards centered */
-            margin: 0 auto;
-            width: 100%;
-        }
-    
-        .reason-card {
-            width: 100%;
-            max-width: 320px; /* ⬅ prevents uneven stretching */
-            background: rgba(45, 19, 24, 0.9);
-            border: 1px solid rgba(232, 180, 188, 0.2);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.5s ease;
-        }
-    
-        .reason-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    
-        .reason-number {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.4rem;
-            color: var(--rose);
-            opacity: 0.7;
-        }
-    
-        .reason-text {
-            color: var(--cream);
-            font-size: 1.05rem;
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-    
-        .final-message {
-            text-align: center;
-            margin: 4rem auto 0;
-            padding: 2rem;
-            max-width: 700px;
-            background: rgba(232, 180, 188, 0.1);
-            border-radius: 20px;
-            border: 1px solid rgba(232, 180, 188, 0.2);
-            color: var(--cream);
-            font-style: italic;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why You’re My Favorite Person 💗</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --rose: #e8b4bc;
+    --deep-rose: #c77b8b;
+    --burgundy: #722f37;
+    --cream: #fef9f3;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a0a0e, #2d1318);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    padding: 2rem 1rem;
+}
+
+/* ---------- Floating Petals ---------- */
+.petals-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.petal {
+    position: absolute;
+    top: -40px;
+    opacity: 0;
+    animation-name: fall;
+    animation-timing-function: linear;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(110vh) translateX(var(--drift)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ---------- UI ---------- */
+.back-btn {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    color: var(--rose);
+    text-decoration: none;
+    opacity: 0.75;
+    z-index: 10;
+}
+.back-btn:hover { opacity: 1; }
+
+.music-controls {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10;
+}
+
+#musicToggle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(45,19,24,0.85);
+    border: 2px solid var(--rose);
+    color: var(--rose);
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+/* ---------- Layout ---------- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 5;
+}
+
+.page-title h1 {
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    color: var(--rose);
+    margin-bottom: 2.5rem;
+}
+
+/* ---------- Envelope ---------- */
+.envelope-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+    perspective: 1000px;
+}
+
+.envelope {
+    width: 140px;
+    height: 90px;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+}
+
+.envelope-body {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+    border-radius: 6px;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: var(--burgundy);
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    transform-origin: top;
+    transition: transform 0.6s ease;
+}
+
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.envelope-heart {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* ---------- Reasons ---------- */
+.reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    place-items: center;
+}
+
+.reason-card {
+    max-width: 320px;
+    width: 100%;
+    background: rgba(45,19,24,0.9);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.5s ease;
+}
+
+.reason-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reason-number {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.2rem;
+    color: var(--rose);
+}
+
+.reason-text {
+    color: var(--cream);
+    margin-top: 0.5rem;
+}
+
+/* ---------- Final ---------- */
+.final-message {
+    margin: 4rem auto 0;
+    max-width: 700px;
+    padding: 2rem;
+    text-align: center;
+    color: var(--cream);
+    background: rgba(232,180,188,0.1);
+    border-radius: 20px;
+}
+</style>
 </head>
+
 <body>
 
-    <a href="index.html" class="back-btn">← Back to Card</a>
-    
-    <div class="petals-container" id="petals"></div>
+<a href="index.html" class="back-btn">← Back</a>
 
-    <div class="container">
-        <div class="page-title">
-            <h1>💗 Why You’re My Favorite Person</h1>
-        </div>
+<div class="music-controls">
+    <button id="musicToggle">🔊</button>
+</div>
 
-        <div class="envelope-container">
-            <div class="envelope" id="mainEnvelope">
-                <div class="envelope-body"></div>
-                <div class="envelope-flap"></div>
-                <span class="envelope-heart">💕</span>
-            </div>
-        </div>
+<div class="petals-container" id="petals"></div>
 
-        <div class="reasons-grid">
-            <div class="reason-card"><span class="reason-number">1</span><p class="reason-text">Your smile that radiates warmth and lights up everything around you</p><span>😊</span></div>
-            <div class="reason-card"><span class="reason-number">2</span><p class="reason-text">Your sense of humor — effortless, unexpected, and always perfect</p><span>😂</span></div>
-            <div class="reason-card"><span class="reason-number">3</span><p class="reason-text">You’re not afraid to get your hands dirty… even if a thumb once paid the price</p><span>🩹</span></div>
-            <div class="reason-card"><span class="reason-number">4</span><p class="reason-text">The way you take care of me — my skin, my hair, my teeth, my lifestyle</p><span>💆‍♀️</span></div>
-            <div class="reason-card"><span class="reason-number">5</span><p class="reason-text">You’re always there for me — no judgment, just listening and understanding</p><span>🤍</span></div>
-            <div class="reason-card"><span class="reason-number">6</span><p class="reason-text">You’re the one person I genuinely look forward to talking to every day</p><span>💬</span></div>
-            <div class="reason-card"><span class="reason-number">7</span><p class="reason-text">You’ve turned me into someone who actually explores great restaurants</p><span>🍽️</span></div>
-            <div class="reason-card"><span class="reason-number">8</span><p class="reason-text">You introduced me to desi bangers — and yes, Arijit Singh is the GOAT</p><span>🎶</span></div>
-            <div class="reason-card"><span class="reason-number">9</span><p class="reason-text">You make ordinary days feel exciting just by being part of them</p><span>✨</span></div>
-            <div class="reason-card"><span class="reason-number">10</span><p class="reason-text">Because loving you feels natural, easy, and completely right</p><span>💗</span></div>
-        </div>
+<div class="container">
+    <div class="page-title">
+        <h1>💗 Why You’re My Favorite Person</h1>
+    </div>
 
-        <div class="final-message">
-            <p>No matter where life takes us, you are deeply appreciated and endlessly cared for.</p>
-            <div style="font-size: 2rem; margin-top: 10px;">💝</div>
+    <div class="envelope-container">
+        <div class="envelope" id="mainEnvelope">
+            <div class="envelope-body"></div>
+            <div class="envelope-flap"></div>
+            <div class="envelope-heart">💕</div>
         </div>
     </div>
 
-    <div class="music-controls">
-        <button id="musicToggle">🔊</button>
+    <div class="reasons-grid">
+        <div class="reason-card"><div class="reason-number">1</div><p class="reason-text">Your smile lights everything up</p></div>
+        <div class="reason-card"><div class="reason-number">2</div><p class="reason-text">Your effortless humor</p></div>
+        <div class="reason-card"><div class="reason-number">3</div><p class="reason-text">You care deeply, always</p></div>
+        <div class="reason-card"><div class="reason-number">4</div><p class="reason-text">You make ordinary days special</p></div>
     </div>
-    
-    <audio id="bgMusic" loop>
-        <source src="Tum-se.mp3" type="audio/mpeg">
-    </audio>
 
-    <script>
-        // Petal Generation
-        const petalsContainer = document.getElementById('petals');
-        const emojis = ['🌸', '🌺', '🌹', '💮'];
-        
-        function createPetal() {
-            const petal = document.createElement('div');
-            petal.className = 'petal';
-            petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            petal.style.left = Math.random() * 100 + '%';
-            petal.style.fontSize = (Math.random() * 15 + 15) + 'px';
-            petal.style.animationDuration = (Math.random() * 5 + 7) + 's';
-            petalsContainer.appendChild(petal);
-            setTimeout(() => petal.remove(), 10000);
+    <div class="final-message">
+        No matter where life takes us, you’re deeply appreciated 💝
+    </div>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="Tum-se.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* ---------- Petals ---------- */
+const petals = document.getElementById('petals');
+const emojis = ['🌸','🌺','🌹','💮'];
+
+function createPetal() {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+    petal.style.left = Math.random() * 100 + 'vw';
+    petal.style.fontSize = 16 + Math.random() * 14 + 'px';
+    petal.style.animationDuration = 8 + Math.random() * 6 + 's';
+    petal.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+
+    petals.appendChild(petal);
+    setTimeout(() => petal.remove(), 14000);
+}
+setInterval(createPetal, 600);
+
+/* ---------- Envelope ---------- */
+document.getElementById('mainEnvelope')
+    .addEventListener('click', function () {
+        this.classList.toggle('open');
+    });
+
+/* ---------- Music ---------- */
+const bgMusic = document.getElementById('bgMusic');
+const btn = document.getElementById('musicToggle');
+
+btn.onclick = () => {
+    if (bgMusic.paused) {
+        bgMusic.play();
+        btn.textContent = '🔊';
+    } else {
+        bgMusic.pause();
+        btn.textContent = '🔇';
+    }
+};
+
+/* ---------- Reveal Cards ---------- */
+const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('visible'), i * 120);
         }
-        setInterval(createPetal, 600);
+    });
+}, { threshold: 0.2 });
 
-        // Music Logic
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicToggle');
+document.querySelectorAll('.reason-card')
+    .forEach(card => observer.observe(card));
+</script>
 
-        musicBtn.addEventListener('click', () => {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                musicBtn.textContent = '🔊';
-            } else {
-                bgMusic.pause();
-                musicBtn.textContent = '🔇';
-            }
-        });
-
-        // Intersection Observer for Cards
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('visible'), index * 100);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reason-card').forEach(card => observer.observe(card));
-
-        // Envelope Interaction
-        document.getElementById('mainEnvelope').addEventListener('click', function() {
-            this.classList.toggle('open');
-        });
-    </script>
 </body>
 </html>
