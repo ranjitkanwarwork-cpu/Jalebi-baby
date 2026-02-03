@@ -467,8 +467,8 @@
     <!-- ============================================== -->
     <!-- 🎵 BACKGROUND MUSIC                           -->
     <!-- ============================================== -->
-    <audio id="bgMusic" loop>
-        <source src="./Mere-Laila.mp3" type="audio/mpeg">
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Mere-Laila.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Music Control Button -->
@@ -794,14 +794,19 @@
         let isMusicPlaying = false;
 
         function toggleMusic() {
-            if (isMusicPlaying) {
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    musicBtn.textContent = '🔊';
+                    if(vinyl) vinyl.classList.remove('paused');
+                    if(nowPlaying) nowPlaying.classList.remove('paused');
+                    isMusicPlaying = true;
+                }).catch(err => console.log("Safari blocked autoplay. Click again."));
+            } else {
                 bgMusic.pause();
                 musicBtn.textContent = '🔇';
+                if(vinyl) vinyl.classList.add('paused');
+                if(nowPlaying) nowPlaying.classList.add('paused');
                 isMusicPlaying = false;
-            } else {
-                bgMusic.play();
-                musicBtn.textContent = '🔊';
-                isMusicPlaying = true;
             }
         }
 
