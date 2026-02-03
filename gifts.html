@@ -134,7 +134,7 @@
             font-size: 1.1rem;
         }
 
-        /* Gifts Grid - 3 Columns - FIXED LAYOUT */
+        /* Gifts Grid - ULTRA STABLE */
         .gifts-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -143,38 +143,47 @@
             max-width: 1200px;
         }
 
-        /* Gift Box - FIXED HEIGHT */
+        /* Gift Box Container - ABSOLUTE STABILITY */
         .gift-box {
-            perspective: 1000px;
-            cursor: pointer;
-            height: 450px; /* FIXED HEIGHT - prevents shifting */
-            transition: transform 0.3s ease;
-        }
-
-        .gift-box:hover:not(.opened) {
-            transform: translateY(-10px);
-        }
-
-        .gift-inner {
-            position: relative;
             width: 100%;
-            height: 100%; /* Uses parent's fixed height */
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
+            height: 450px;
+            position: relative;
+            cursor: pointer;
+            perspective: 1200px;
+            contain: layout style paint; /* CSS containment for stability */
         }
 
-        .gift-box.opened .gift-inner {
+        /* Disable hover on opened gifts */
+        .gift-box:not(.opened):hover .gift-wrapper {
+            transform: translateY(-8px);
+        }
+
+        /* Gift Wrapper - handles the flip */
+        .gift-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .gift-box.opened .gift-wrapper {
             transform: rotateY(180deg);
         }
 
+        /* Front and Back faces */
         .gift-front,
         .gift-back {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100%; /* FIXED HEIGHT */
+            height: 100%;
             backface-visibility: hidden;
             border-radius: 20px;
-            overflow: hidden; /* Prevents content overflow */
+            overflow: hidden;
         }
 
         /* Gift Front */
@@ -186,7 +195,6 @@
             justify-content: center;
             border: 2px solid rgba(232, 180, 188, 0.3);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            position: relative;
         }
 
         .ribbon-h {
@@ -247,23 +255,23 @@
             50% { transform: scale(1.05); }
         }
 
-        /* Gift Back - SCROLLABLE CONTENT */
+        /* Gift Back */
         .gift-back {
             background: linear-gradient(145deg, rgba(45, 19, 24, 0.95), rgba(26, 10, 14, 0.98));
             transform: rotateY(180deg);
             border: 1px solid rgba(232, 180, 188, 0.2);
-            padding: 1.5rem;
+            padding: 1.2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Changed from center */
+            justify-content: center;
             text-align: center;
-            overflow-y: auto; /* Allow scrolling if content is too tall */
+            overflow-y: auto;
         }
 
-        /* Custom scrollbar for gift back */
+        /* Custom scrollbar */
         .gift-back::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
 
         .gift-back::-webkit-scrollbar-track {
@@ -276,12 +284,18 @@
             border-radius: 10px;
         }
 
+        .gift-content {
+            width: 100%;
+            max-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .gift-icon {
             font-size: 3rem;
             margin-bottom: 0.5rem;
-            margin-top: 0.5rem;
             filter: drop-shadow(0 4px 8px rgba(232, 180, 188, 0.2));
-            flex-shrink: 0; /* Prevents icon from shrinking */
         }
 
         .gift-title {
@@ -289,7 +303,6 @@
             color: var(--cream);
             font-size: 1.3rem;
             margin-bottom: 0.5rem;
-            flex-shrink: 0;
         }
 
         .gift-description {
@@ -297,7 +310,6 @@
             font-size: 0.9rem;
             line-height: 1.4;
             margin-bottom: 0.75rem;
-            flex-shrink: 0;
         }
 
         .coupon {
@@ -307,8 +319,6 @@
             padding: 0.75rem;
             margin-top: 0.5rem;
             width: 100%;
-            max-width: 220px;
-            flex-shrink: 0;
         }
 
         .coupon-title {
@@ -333,8 +343,7 @@
             color: var(--rose);
             font-size: 0.8rem;
             margin-top: 0.75rem;
-            max-width: 220px;
-            flex-shrink: 0;
+            width: 100%;
         }
 
         /* Progress Section */
@@ -438,7 +447,7 @@
         <div class="gifts-grid">
             <!-- Gift 1: Free Massage -->
             <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
+                <div class="gift-wrapper">
                     <div class="gift-front">
                         <div class="tap-hint">Tap to open 🎁</div>
                         <div class="ribbon-h"></div>
@@ -447,21 +456,23 @@
                         <div class="gift-label">Surprise #1</div>
                     </div>
                     <div class="gift-back">
-                        <div class="gift-icon">💆‍♀️</div>
-                        <h3 class="gift-title">Free Massage</h3>
-                        <p class="gift-description">Relax and let me take care of you with a soothing massage whenever you need it!</p>
-                        <div class="coupon">
-                            <div class="coupon-title">💆 Relaxation Voucher</div>
-                            <div class="coupon-value">Unlimited uses • No expiration</div>
+                        <div class="gift-content">
+                            <div class="gift-icon">💆‍♀️</div>
+                            <h3 class="gift-title">Free Massage</h3>
+                            <p class="gift-description">Relax and let me take care of you with a soothing massage whenever you need it!</p>
+                            <div class="coupon">
+                                <div class="coupon-title">💆 Relaxation Voucher</div>
+                                <div class="coupon-value">Unlimited uses • No expiration</div>
+                            </div>
+                            <div class="gift-message">"Because you deserve to feel pampered and loved 🥰"</div>
                         </div>
-                        <div class="gift-message">"Because you deserve to feel pampered and loved 🥰"</div>
                     </div>
                 </div>
             </div>
 
             <!-- Gift 2: Coffee Date -->
             <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
+                <div class="gift-wrapper">
                     <div class="gift-front">
                         <div class="tap-hint">Tap to open 🎁</div>
                         <div class="ribbon-h"></div>
@@ -470,21 +481,23 @@
                         <div class="gift-label">Surprise #2</div>
                     </div>
                     <div class="gift-back">
-                        <div class="gift-icon">☕</div>
-                        <h3 class="gift-title">Coffee Date</h3>
-                        <p class="gift-description">Let's grab your favorite coffee and spend quality time together.</p>
-                        <div class="coupon">
-                            <div class="coupon-title">☕ Caffeine Pass</div>
-                            <div class="coupon-value">Any café • Your drink is on me</div>
+                        <div class="gift-content">
+                            <div class="gift-icon">☕</div>
+                            <h3 class="gift-title">Coffee Date</h3>
+                            <p class="gift-description">Let's grab your favorite coffee and spend quality time together.</p>
+                            <div class="coupon">
+                                <div class="coupon-title">☕ Caffeine Pass</div>
+                                <div class="coupon-value">Any café • Your drink is on me</div>
+                            </div>
+                            <div class="gift-message">"Coffee, conversations, and you 💕"</div>
                         </div>
-                        <div class="gift-message">"Coffee, conversations, and you 💕"</div>
                     </div>
                 </div>
             </div>
 
             <!-- Gift 3: Handmade Bouquet -->
             <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
+                <div class="gift-wrapper">
                     <div class="gift-front">
                         <div class="tap-hint">Tap to open 🎁</div>
                         <div class="ribbon-h"></div>
@@ -493,21 +506,23 @@
                         <div class="gift-label">Surprise #3</div>
                     </div>
                     <div class="gift-back">
-                        <div class="gift-icon">💐</div>
-                        <h3 class="gift-title">Handmade Bouquet</h3>
-                        <p class="gift-description">A bouquet I'll make just for you, with my own hands.</p>
-                        <div class="coupon">
-                            <div class="coupon-title">💐 Flower Voucher</div>
-                            <div class="coupon-value">Handmade with love</div>
+                        <div class="gift-content">
+                            <div class="gift-icon">💐</div>
+                            <h3 class="gift-title">Handmade Bouquet</h3>
+                            <p class="gift-description">A bouquet I'll make just for you, with my own hands.</p>
+                            <div class="coupon">
+                                <div class="coupon-title">💐 Flower Voucher</div>
+                                <div class="coupon-value">Handmade with love</div>
+                            </div>
+                            <div class="gift-message">"Your smile is my favorite flower 🌹"</div>
                         </div>
-                        <div class="gift-message">"Your smile is my favorite flower 🌹"</div>
                     </div>
                 </div>
             </div>
 
             <!-- Gift 4: Movie Date Night -->
             <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
+                <div class="gift-wrapper">
                     <div class="gift-front">
                         <div class="tap-hint">Tap to open 🎁</div>
                         <div class="ribbon-h"></div>
@@ -516,21 +531,23 @@
                         <div class="gift-label">Surprise #4</div>
                     </div>
                     <div class="gift-back">
-                        <div class="gift-icon">🎬</div>
-                        <h3 class="gift-title">Movie Date Night</h3>
-                        <p class="gift-description">Movie, popcorn, and cuddles at AMC South Lake.</p>
-                        <div class="coupon">
-                            <div class="coupon-title">🎟️ Movie Night for Two</div>
-                            <div class="coupon-value">Any movie you want</div>
+                        <div class="gift-content">
+                            <div class="gift-icon">🎬</div>
+                            <h3 class="gift-title">Movie Date Night</h3>
+                            <p class="gift-description">Movie, popcorn, and cuddles at AMC South Lake.</p>
+                            <div class="coupon">
+                                <div class="coupon-title">🎟️ Movie Night for Two</div>
+                                <div class="coupon-value">Any movie you want</div>
+                            </div>
+                            <div class="gift-message">"I'll share my popcorn with you ❤️"</div>
                         </div>
-                        <div class="gift-message">"I'll share my popcorn with you ❤️"</div>
                     </div>
                 </div>
             </div>
 
             <!-- Gift 5: Home Cooked Meal -->
             <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
+                <div class="gift-wrapper">
                     <div class="gift-front">
                         <div class="tap-hint">Tap to open 🎁</div>
                         <div class="ribbon-h"></div>
@@ -539,21 +556,23 @@
                         <div class="gift-label">Surprise #5</div>
                     </div>
                     <div class="gift-back">
-                        <div class="gift-icon">🍝</div>
-                        <h3 class="gift-title">Home Cooked Meal</h3>
-                        <p class="gift-description">Anything you crave — cooked with love by your personal chef.</p>
-                        <div class="coupon">
-                            <div class="coupon-title">👨‍🍳 Chef's Special</div>
-                            <div class="coupon-value">Valid for 1 Homemade Feast</div>
+                        <div class="gift-content">
+                            <div class="gift-icon">🍝</div>
+                            <h3 class="gift-title">Home Cooked Meal</h3>
+                            <p class="gift-description">Anything you crave — cooked with love by your personal chef.</p>
+                            <div class="coupon">
+                                <div class="coupon-title">👨‍🍳 Chef's Special</div>
+                                <div class="coupon-value">Valid for 1 Homemade Feast</div>
+                            </div>
+                            <div class="gift-message">"Tell me what you're craving 💕"</div>
                         </div>
-                        <div class="gift-message">"Tell me what you're craving 💕"</div>
                     </div>
                 </div>
             </div>
 
             <!-- Gift 6: One Day of YES -->
             <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
+                <div class="gift-wrapper">
                     <div class="gift-front">
                         <div class="tap-hint">Tap to open 🎁</div>
                         <div class="ribbon-h"></div>
@@ -562,14 +581,16 @@
                         <div class="gift-label">Surprise #6</div>
                     </div>
                     <div class="gift-back">
-                        <div class="gift-icon">✨</div>
-                        <h3 class="gift-title">One Day of YES!</h3>
-                        <p class="gift-description">One full day where the answer to your requests is always YES.</p>
-                        <div class="coupon">
-                            <div class="coupon-title">👑 Your Wish</div>
-                            <div class="coupon-value">24 hours of YES</div>
+                        <div class="gift-content">
+                            <div class="gift-icon">✨</div>
+                            <h3 class="gift-title">One Day of YES!</h3>
+                            <p class="gift-description">One full day where the answer to your requests is always YES.</p>
+                            <div class="coupon">
+                                <div class="coupon-title">👑 Your Wish</div>
+                                <div class="coupon-value">24 hours of YES</div>
+                            </div>
+                            <div class="gift-message">"Careful… this one is powerful 😘"</div>
                         </div>
-                        <div class="gift-message">"Careful… this one is powerful 😘"</div>
                     </div>
                 </div>
             </div>
@@ -592,7 +613,6 @@
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicToggle');
 
-        // Handle audio errors gracefully
         bgMusic.addEventListener('error', function() {
             console.log('Audio file not found');
             musicBtn.style.display = 'none';
@@ -620,18 +640,15 @@
                 giftBox.classList.add('opened');
                 openedGifts++;
 
-                // Update progress bar
                 const progressPercentage = (openedGifts / totalGifts) * 100;
                 document.getElementById('progressFill').style.width = progressPercentage + '%';
 
-                // Update text
                 if (openedGifts === totalGifts) {
                     document.getElementById('openedCountText').textContent = '🎉 All gifts opened! You are so loved! 💕';
                 } else {
                     document.getElementById('openedCountText').textContent = openedGifts + ' of ' + totalGifts + ' gifts opened!';
                 }
 
-                // Auto-play music on first gift open
                 if (openedGifts === 1 && bgMusic.paused) {
                     bgMusic.play().catch(function(err) {
                         console.log('Auto-play prevented');
