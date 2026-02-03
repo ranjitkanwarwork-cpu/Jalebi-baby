@@ -43,6 +43,36 @@
             overflow: hidden;
         }
 
+        /* Music Control Button */
+        .music-controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        #musicToggle {
+            background: rgba(45, 19, 24, 0.8);
+            border: 2px solid var(--rose);
+            color: var(--rose);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        #musicToggle:hover {
+            transform: scale(1.1);
+            background: var(--burgundy);
+        }
+
         .petal {
             position: absolute;
             font-size: 20px;
@@ -437,9 +467,13 @@
             </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- 📝 THE LOVE LETTER - EDIT BELOW!              -->
-        <!-- ============================================== -->
+    <div class="music-controls">
+            <button id="musicToggle" onclick="toggleMusic()">🔊</button>
+        </div>
+    
+        <audio id="bgMusic" loop preload="auto">
+            <source src="Tum-se.mp3" type="audio/mpeg">
+        </audio>
    
 
         <!-- ============================================== -->
@@ -542,6 +576,33 @@
         setInterval(createPetal, 600);
         for (let i = 0; i < 10; i++) createPetal();
 
+// Music Logic
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicToggle');
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    musicBtn.textContent = '🔊';
+                    isMusicPlaying = true;
+                }).catch(err => {
+                    console.log("Playback blocked by browser");
+                });
+            } else {
+                bgMusic.pause();
+                musicBtn.textContent = '🔇';
+                isMusicPlaying = false;
+            }
+        }
+
+        // Optional: Auto-play attempt on first click anywhere
+        document.body.addEventListener('click', () => {
+            if (!isMusicPlaying && bgMusic.paused) {
+                // toggleMusic(); // Uncomment this if you want music to start on the first click
+            }
+        }, { once: true });
+        
         // Animate reason cards on scroll
         const reasonCards = document.querySelectorAll('.reason-card');
         
