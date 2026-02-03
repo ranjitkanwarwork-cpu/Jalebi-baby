@@ -1,310 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Why You’re My Favorite Person 💗</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why You're My Favorite Person 💗</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+        :root {
+            --rose: #e8b4bc;
+            --deep-rose: #c77b8b;
+            --burgundy: #722f37;
+            --cream: #fef9f3;
+            --ink: #2d1318;
+        }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0a0e 0%, #2d1318 30%, #1a0a0e 70%, #0d0507 100%);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            padding: 2rem 1rem;
+        }
 
-:root {
-    --rose: #e8b4bc;
-    --deep-rose: #c77b8b;
-    --burgundy: #722f37;
-    --cream: #fef9f3;
-}
+        /* ---------- Floating Petals ---------- */
+        .petals-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
 
-body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #1a0a0e, #2d1318);
-    font-family: 'Cormorant Garamond', serif;
-    overflow-x: hidden;
-    padding: 2rem 1rem;
-}
+        .petal {
+            position: absolute;
+            top: -40px;
+            opacity: 0;
+            animation-name: fall;
+            animation-timing-function: linear;
+            will-change: transform, opacity;
+        }
 
-/* ---------- Floating Petals ---------- */
-.petals-container {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
-}
+        @keyframes fall {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(110vh) translateX(var(--drift)) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
-.petal {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    opacity: 0;
-    transform: translateX(var(--start-x));
-    animation: fall linear forwards;
-    will-change: transform, opacity;
-}
+        /* ---------- UI Controls ---------- */
+        .back-btn {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 100;
+            color: var(--rose);
+            text-decoration: none;
+            font-size: 1rem;
+            opacity: 0.75;
+            transition: all 0.3s ease;
+        }
 
-@keyframes fall {
-    0% {
-        transform: translateX(var(--start-x)) translateY(0) rotate(0deg);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.7;
-    }
-    100% {
-        transform: translateX(calc(var(--start-x) + var(--drift)))
-                   translateY(110vh)
-                   rotate(360deg);
-        opacity: 0;
-    }
-}
+        .back-btn:hover {
+            opacity: 1;
+            transform: translateX(-5px);
+        }
 
-/* ---------- UI ---------- */
-.back-btn {
-    position: fixed;
-    top: 1.5rem;
-    left: 1.5rem;
-    color: var(--rose);
-    text-decoration: none;
-    opacity: 0.75;
-    z-index: 10;
-}
-.back-btn:hover { opacity: 1; }
+        .music-controls {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
+        }
 
-.music-controls {
-    position: fixed;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 10;
-}
+        #musicToggle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(45, 19, 24, 0.85);
+            border: 2px solid var(--rose);
+            color: var(--rose);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-#musicToggle {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(45,19,24,0.85);
-    border: 2px solid var(--rose);
-    color: var(--rose);
-    font-size: 1.3rem;
-    cursor: pointer;
-}
+        #musicToggle:hover {
+            transform: scale(1.1);
+            background: rgba(45, 19, 24, 0.95);
+        }
 
-/* ---------- Layout ---------- */
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 5;
-}
+        /* ---------- Layout ---------- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
 
-.page-title h1 {
-    text-align: center;
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(2.5rem, 7vw, 4rem);
-    color: var(--rose);
-    margin-bottom: 2.5rem;
-}
+        .page-title h1 {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 7vw, 4rem);
+            color: var(--rose);
+            margin-bottom: 2.5rem;
+            text-shadow: 0 2px 10px rgba(232, 180, 188, 0.3);
+        }
 
-/* ---------- Envelope ---------- */
-.envelope-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 3rem;
-    perspective: 1000px;
-}
+        /* ---------- Envelope ---------- */
+        .envelope-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            perspective: 1000px;
+        }
 
-.envelope {
-    width: 140px;
-    height: 90px;
-    position: relative;
-    cursor: pointer;
-    transform-style: preserve-3d;
-}
+        .envelope {
+            width: 140px;
+            height: 90px;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
 
-.envelope-body {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--rose), var(--deep-rose));
-    border-radius: 6px;
-}
+        .envelope:hover {
+            transform: scale(1.05);
+        }
 
-.envelope-flap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: var(--burgundy);
-    clip-path: polygon(0 0, 50% 100%, 100% 0);
-    transform-origin: top;
-    transition: transform 0.6s ease;
-}
+        .envelope-body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
 
-.envelope.open .envelope-flap {
-    transform: rotateX(180deg);
-}
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: var(--burgundy);
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top;
+            transition: transform 0.6s ease;
+        }
 
-.envelope-heart {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-}
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
 
-/* ---------- Reasons ---------- */
-.reasons-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-    place-items: center;
-}
+        .envelope-heart {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
 
-.reason-card {
-    max-width: 320px;
-    width: 100%;
-    background: rgba(45,19,24,0.9);
-    border-radius: 16px;
-    padding: 1.5rem;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: 0.5s ease;
-}
+        /* ---------- Reasons Grid ---------- */
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            justify-items: center;
+            margin: 0 auto 2rem;
+            width: 100%;
+        }
 
-.reason-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+        .reason-card {
+            width: 100%;
+            max-width: 320px;
+            background: rgba(45, 19, 24, 0.9);
+            border: 1px solid rgba(232, 180, 188, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
 
-.reason-number {
-    font-family: 'Dancing Script', cursive;
-    font-size: 2.2rem;
-    color: var(--rose);
-}
+        .reason-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(232, 180, 188, 0.4);
+            box-shadow: 0 6px 20px rgba(232, 180, 188, 0.2);
+        }
 
-.reason-text {
-    color: var(--cream);
-    margin-top: 0.5rem;
-}
+        .reason-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-/* ---------- Final ---------- */
-.final-message {
-    margin: 4rem auto 0;
-    max-width: 700px;
-    padding: 2rem;
-    text-align: center;
-    color: var(--cream);
-    background: rgba(232,180,188,0.1);
-    border-radius: 20px;
-}
-</style>
+        .reason-number {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.4rem;
+            color: var(--rose);
+            opacity: 0.85;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .reason-text {
+            color: var(--cream);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin: 0.5rem 0;
+        }
+
+        .reason-card span:last-child {
+            display: block;
+            font-size: 1.5rem;
+            margin-top: 0.75rem;
+        }
+
+        /* ---------- Final Message ---------- */
+        .final-message {
+            text-align: center;
+            margin: 4rem auto 0;
+            padding: 2rem;
+            max-width: 700px;
+            background: rgba(232, 180, 188, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(232, 180, 188, 0.2);
+            color: var(--cream);
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .final-message p {
+            font-style: italic;
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 600px) {
+            .reasons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            body {
+                padding: 1.5rem 0.75rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <a href="javascript:history.back()" class="back-btn">← Back to Card</a>
 
-<a href="index.html" class="back-btn">← Back</a>
-
-<div class="music-controls">
-    <button id="musicToggle">🔊</button>
-</div>
-
-<div class="petals-container" id="petals"></div>
-
-<div class="container">
-    <div class="page-title">
-        <h1>💗 Why You’re My Favorite Person</h1>
+    <div class="music-controls">
+        <button id="musicToggle">🔇</button>
     </div>
 
-    <div class="envelope-container">
-        <div class="envelope" id="mainEnvelope">
-            <div class="envelope-body"></div>
-            <div class="envelope-flap"></div>
-            <div class="envelope-heart">💕</div>
+    <div class="petals-container" id="petals"></div>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>💗 Why You're My Favorite Person</h1>
+        </div>
+
+        <div class="envelope-container">
+            <div class="envelope" id="mainEnvelope">
+                <div class="envelope-body"></div>
+                <div class="envelope-flap"></div>
+                <span class="envelope-heart">💕</span>
+            </div>
+        </div>
+
+        <div class="reasons-grid">
+            <div class="reason-card">
+                <span class="reason-number">1</span>
+                <p class="reason-text">Your smile that radiates warmth and lights up everything around you</p>
+                <span>😊</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">2</span>
+                <p class="reason-text">Your sense of humor — effortless, unexpected, and always perfect</p>
+                <span>😂</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">3</span>
+                <p class="reason-text">You're not afraid to get your hands dirty… even if a thumb once paid the price</p>
+                <span>🩹</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">4</span>
+                <p class="reason-text">The way you take care of me — my skin, my hair, my teeth, my lifestyle</p>
+                <span>💆‍♀️</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">5</span>
+                <p class="reason-text">You're always there for me — no judgment, just listening and understanding</p>
+                <span>🤍</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">6</span>
+                <p class="reason-text">You're the one person I genuinely look forward to talking to every day</p>
+                <span>💬</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">7</span>
+                <p class="reason-text">You've turned me into someone who actually explores great restaurants</p>
+                <span>🍽️</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">8</span>
+                <p class="reason-text">You introduced me to desi bangers — and yes, Arijit Singh is the GOAT</p>
+                <span>🎶</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">9</span>
+                <p class="reason-text">You make ordinary days feel exciting just by being part of them</p>
+                <span>✨</span>
+            </div>
+            <div class="reason-card">
+                <span class="reason-number">10</span>
+                <p class="reason-text">Because loving you feels natural, easy, and completely right</p>
+                <span>💗</span>
+            </div>
+        </div>
+
+        <div class="final-message">
+            <p>No matter where life takes us, you are deeply appreciated and endlessly cared for.</p>
+            <div style="font-size: 2rem; margin-top: 10px;">💝</div>
         </div>
     </div>
 
-    <div class="reasons-grid">
-        <div class="reason-card"><div class="reason-number">1</div><p class="reason-text">Your smile lights everything up</p></div>
-        <div class="reason-card"><div class="reason-number">2</div><p class="reason-text">Your effortless humor</p></div>
-        <div class="reason-card"><div class="reason-number">3</div><p class="reason-text">You care deeply, always</p></div>
-        <div class="reason-card"><div class="reason-number">4</div><p class="reason-text">You make ordinary days special</p></div>
-    </div>
+    <audio id="bgMusic" loop>
+        <source src="Tum-se.mp3" type="audio/mpeg">
+    </audio>
 
-    <div class="final-message">
-        No matter where life takes us, you’re deeply appreciated 💝
-    </div>
-</div>
+    <script>
+        /* ---------- Petals Animation ---------- */
+        const petalsContainer = document.getElementById('petals');
+        const emojis = ['🌸', '🌺', '🌹', '💮'];
+        let petalCount = 0;
+        const maxPetals = 30;
 
-<audio id="bgMusic" loop>
-    <source src="Tum-se.mp3" type="audio/mpeg">
-</audio>
+        function createPetal() {
+            if (petalCount >= maxPetals) return;
 
-<script>
-/* ---------- Petals (FIXED) ---------- */
-const petals = document.getElementById('petals');
-const emojis = ['🌸','🌺','🌹','💮'];
-const MAX_PETALS = 30;
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
 
-function createPetal() {
-    if (petals.children.length >= MAX_PETALS) return;
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.fontSize = (16 + Math.random() * 14) + 'px';
+            petal.style.animationDuration = (8 + Math.random() * 6) + 's';
+            petal.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
 
-    const petal = document.createElement('div');
-    petal.className = 'petal';
-    petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            petalsContainer.appendChild(petal);
+            petalCount++;
 
-    const startX = Math.random() * window.innerWidth;
-    const drift = Math.random() * 120 - 60;
-
-    petal.style.setProperty('--start-x', `${startX}px`);
-    petal.style.setProperty('--drift', `${drift}px`);
-    petal.style.fontSize = 16 + Math.random() * 14 + 'px';
-    petal.style.animationDuration = 9 + Math.random() * 6 + 's';
-
-    petals.appendChild(petal);
-    setTimeout(() => petal.remove(), 16000);
-}
-
-setInterval(createPetal, 700);
-
-/* ---------- Envelope ---------- */
-document.getElementById('mainEnvelope')
-    .addEventListener('click', function () {
-        this.classList.toggle('open');
-    });
-
-/* ---------- Music ---------- */
-const bgMusic = document.getElementById('bgMusic');
-const btn = document.getElementById('musicToggle');
-
-btn.onclick = () => {
-    if (bgMusic.paused) {
-        bgMusic.play();
-        btn.textContent = '🔊';
-    } else {
-        bgMusic.pause();
-        btn.textContent = '🔇';
-    }
-};
-
-/* ---------- Reveal Cards ---------- */
-const observer = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-            setTimeout(() => e.target.classList.add('visible'), i * 120);
+            setTimeout(() => {
+                petal.remove();
+                petalCount--;
+            }, 14000);
         }
-    });
-}, { threshold: 0.2 });
 
-document.querySelectorAll('.reason-card')
-    .forEach(card => observer.observe(card));
-</script>
+        setInterval(createPetal, 600);
 
+        /* ---------- Envelope Interaction ---------- */
+        document.getElementById('mainEnvelope').addEventListener('click', function() {
+            this.classList.toggle('open');
+        });
+
+        /* ---------- Music Controls ---------- */
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicToggle');
+
+        // Handle audio errors gracefully
+        bgMusic.addEventListener('error', function() {
+            console.log('Audio file not found - music controls disabled');
+            musicBtn.style.display = 'none';
+        });
+
+        musicBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(err => {
+                    console.log('Playback failed:', err);
+                    musicBtn.textContent = '🔇';
+                });
+                musicBtn.textContent = '🔊';
+            } else {
+                bgMusic.pause();
+                musicBtn.textContent = '🔇';
+            }
+        });
+
+        /* ---------- Card Reveal Animation ---------- */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.reason-card').forEach(card => observer.observe(card));
+    </script>
 </body>
 </html>
