@@ -35,26 +35,31 @@ body {
     inset: 0;
     pointer-events: none;
     z-index: 1;
+    overflow: hidden;
 }
 
 .petal {
     position: absolute;
     top: -40px;
+    left: 0;
     opacity: 0;
-    animation-name: fall;
-    animation-timing-function: linear;
+    transform: translateX(var(--start-x));
+    animation: fall linear forwards;
+    will-change: transform, opacity;
 }
 
 @keyframes fall {
     0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
+        transform: translateX(var(--start-x)) translateY(0) rotate(0deg);
         opacity: 0;
     }
     10% {
-        opacity: 0.6;
+        opacity: 0.7;
     }
     100% {
-        transform: translateY(110vh) translateX(var(--drift)) rotate(360deg);
+        transform: translateX(calc(var(--start-x) + var(--drift)))
+                   translateY(110vh)
+                   rotate(360deg);
         opacity: 0;
     }
 }
@@ -242,24 +247,31 @@ body {
 </audio>
 
 <script>
-/* ---------- Petals ---------- */
+/* ---------- Petals (FIXED) ---------- */
 const petals = document.getElementById('petals');
 const emojis = ['🌸','🌺','🌹','💮'];
+const MAX_PETALS = 30;
 
 function createPetal() {
+    if (petals.children.length >= MAX_PETALS) return;
+
     const petal = document.createElement('div');
     petal.className = 'petal';
     petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
 
-    petal.style.left = Math.random() * 100 + 'vw';
+    const startX = Math.random() * window.innerWidth;
+    const drift = Math.random() * 120 - 60;
+
+    petal.style.setProperty('--start-x', `${startX}px`);
+    petal.style.setProperty('--drift', `${drift}px`);
     petal.style.fontSize = 16 + Math.random() * 14 + 'px';
-    petal.style.animationDuration = 8 + Math.random() * 6 + 's';
-    petal.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+    petal.style.animationDuration = 9 + Math.random() * 6 + 's';
 
     petals.appendChild(petal);
-    setTimeout(() => petal.remove(), 14000);
+    setTimeout(() => petal.remove(), 16000);
 }
-setInterval(createPetal, 600);
+
+setInterval(createPetal, 700);
 
 /* ---------- Envelope ---------- */
 document.getElementById('mainEnvelope')
