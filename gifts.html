@@ -1,338 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Surprises 🎁</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Surprises 🎁</title>
 
-        :root {
-            --rose: #e8b4bc;
-            --deep-rose: #c77b8b;
-            --blush: #fdf2f4;
-            --burgundy: #722f37;
-            --gold: #d4a574;
-            --cream: #fef9f3;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1a0a0e 0%, #2d1318 30%, #1a0a0e 70%, #0d0507 100%);
-            font-family: 'Cormorant Garamond', serif;
-            overflow-x: hidden;
-            padding: 2rem;
-        }
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* Sparkles Background */
-        .sparkles {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1;
-        }
+:root {
+    --rose: #e8b4bc;
+    --deep-rose: #c77b8b;
+    --burgundy: #722f37;
+    --gold: #d4a574;
+    --cream: #fef9f3;
+}
 
-        .sparkle {
-            position: absolute;
-            width: 4px; height: 4px;
-            background: var(--gold);
-            border-radius: 50%;
-            animation: sparkle 2s infinite ease-in-out;
-        }
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a0a0e, #2d1318, #0d0507);
+    font-family: 'Cormorant Garamond', serif;
+    padding: 2rem;
+    overflow-x: hidden;
+}
 
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
+/* Sparkles */
+.sparkles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
 
-        /* Music Controls */
-        .music-controls {
-            position: fixed;
-            bottom: 2rem; right: 2rem;
-            z-index: 1000;
-        }
+.sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: sparkle 2s infinite ease-in-out;
+}
 
-        #musicToggle {
-            background: rgba(45, 19, 24, 0.8);
-            border: 2px solid var(--rose);
-            color: var(--rose);
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-            display: flex; align-items: center; justify-content: center;
-        }
+@keyframes sparkle {
+    0%,100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
 
-        /* Back Button */
-        .back-btn {
-            position: fixed;
-            top: 2rem; left: 2rem;
-            color: var(--rose);
-            text-decoration: none;
-            font-size: 1rem;
-            display: flex; align-items: center; gap: 0.5rem;
-            opacity: 0.7;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
+/* Back Button */
+.back-btn {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    color: var(--rose);
+    text-decoration: none;
+    opacity: 0.7;
+    z-index: 1000;
+}
 
-        .container {
-            position: relative;
-            z-index: 10;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 3rem;
-        }
+/* 🎵 Music Button – TOP RIGHT */
+.music-controls {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1000;
+}
 
-        .page-title { text-align: center; margin-bottom: 3rem; }
-        .page-title h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            color: var(--rose);
-            text-shadow: 0 0 40px rgba(232, 180, 188, 0.4);
-        }
+#musicToggle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--rose);
+    background: rgba(45,19,24,0.85);
+    color: var(--rose);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    transition: transform 0.25s ease;
+}
 
-        .gifts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
+#musicToggle:hover {
+    transform: scale(1.08);
+}
 
-        .gift-box { perspective: 1000px; cursor: pointer; }
-        .gift-inner {
-            position: relative;
-            height: 400px;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-        }
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    position: relative;
+    z-index: 10;
+    padding-top: 4rem;
+}
 
-        .gift-box.opened .gift-inner { transform: rotateY(180deg); }
-        .gift-front, .gift-back {
-            position: absolute;
-            width: 100%; height: 100%;
-            backface-visibility: hidden;
-            border-radius: 20px;
-        }
+.page-title {
+    text-align: center;
+    margin-bottom: 3rem;
+}
 
-        .gift-front {
-            background: linear-gradient(145deg, var(--deep-rose), var(--burgundy));
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 2px solid rgba(232, 180, 188, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        }
+.page-title h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    color: var(--rose);
+}
 
-        .ribbon-h { position: absolute; width: 100%; height: 40px; background: linear-gradient(90deg, var(--gold), #e8c99b, var(--gold)); top: 50%; transform: translateY(-50%); }
-        .ribbon-v { position: absolute; width: 40px; height: 100%; background: linear-gradient(180deg, var(--gold), #e8c99b, var(--gold)); left: 50%; transform: translateX(-50%); }
-        .bow { position: absolute; top: calc(50% - 50px); left: 50%; transform: translateX(-50%); font-size: 4rem; z-index: 5; }
+/* Gifts Grid */
+.gifts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
 
-        .gift-back {
-            background: linear-gradient(145deg, rgba(45, 19, 24, 0.95), rgba(26, 10, 14, 0.98));
-            transform: rotateY(180deg); border: 1px solid rgba(232, 180, 188, 0.2);
-            padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        }
+.gift-box {
+    perspective: 1000px;
+    cursor: pointer;
+}
 
-        .gift-icon { font-size: 4rem; margin-bottom: 0.5rem; }
-        .gift-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.4rem; }
-        .gift-description { color: rgba(254, 249, 243, 0.8); font-size: 0.95rem; margin-bottom: 0.5rem; }
-        .gift-message { background: rgba(232, 180, 188, 0.1); border-left: 3px solid var(--rose); padding: 0.8rem; border-radius: 0 10px 10px 0; font-style: italic; color: var(--rose); font-size: 0.85rem; margin-top: 10px; }
-        
-        .coupon { background: linear-gradient(135deg, #fef9f3, #fdf2f4); border: 2px dashed var(--rose); border-radius: 12px; padding: 0.8rem; margin-top: 0.5rem; width: 100%; }
-        .coupon-title { font-family: 'Dancing Script', cursive; color: var(--burgundy); font-size: 1.1rem; }
-        .coupon-value { font-family: 'Playfair Display', serif; color: var(--deep-rose); font-size: 0.8rem; }
+.gift-inner {
+    position: relative;
+    height: 400px;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(.2,.8,.2,1);
+}
 
-        .progress-section { text-align: center; margin-top: 3rem; padding: 2rem; background: rgba(232, 180, 188, 0.05); border-radius: 20px; }
-        .progress-bar { width: 100%; max-width: 400px; height: 8px; background: rgba(232, 180, 188, 0.2); border-radius: 10px; margin: 0 auto; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--rose), var(--gold)); width: 0%; transition: width 0.5s ease; }
-    </style>
+.gift-box.opened .gift-inner {
+    transform: rotateY(180deg);
+}
+
+.gift-front, .gift-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    backface-visibility: hidden;
+}
+
+.gift-front {
+    background: linear-gradient(145deg, var(--deep-rose), var(--burgundy));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.ribbon-h, .ribbon-v {
+    position: absolute;
+    background: linear-gradient(var(--gold), #f2d6a2);
+}
+
+.ribbon-h { height: 40px; width: 100%; top: 50%; transform: translateY(-50%); }
+.ribbon-v { width: 40px; height: 100%; left: 50%; transform: translateX(-50%); }
+
+.bow {
+    font-size: 4rem;
+    z-index: 2;
+}
+
+.gift-back {
+    background: linear-gradient(145deg, #2d1318, #1a0a0e);
+    transform: rotateY(180deg);
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.gift-icon {
+    font-size: 3rem;
+}
+
+.gift-title {
+    font-family: 'Playfair Display', serif;
+    margin-top: 0.5rem;
+}
+
+.gift-description {
+    opacity: 0.85;
+    margin: 0.5rem 0;
+}
+
+.coupon {
+    background: #fef9f3;
+    border: 2px dashed var(--rose);
+    border-radius: 12px;
+    padding: 0.6rem;
+    color: var(--burgundy);
+}
+
+.gift-message {
+    margin-top: 0.6rem;
+    font-style: italic;
+    color: var(--rose);
+}
+
+/* Progress */
+.progress-section {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.progress-bar {
+    height: 8px;
+    background: rgba(232,180,188,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 400px;
+    margin: auto;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--rose), var(--gold));
+    transition: width 0.4s ease;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .music-controls { top: 1.25rem; right: 1.25rem; }
+    .back-btn { top: 1.25rem; left: 1.25rem; }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="sparkles" id="sparkles"></div>
-    <a href="index.html" class="back-btn">← Back to Card</a>
+<div class="sparkles" id="sparkles"></div>
 
-    <div class="container">
-        <div class="page-title">
-            <h1>🎁 Your Surprises Await</h1>
-            <p style="color: white; opacity: 0.8; font-style: italic;">Tap each gift to unwrap your special surprises...</p>
-        </div>
+<a href="index.html" class="back-btn">← Back</a>
 
-        <div class="gifts-grid">
-            <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
-                    <div class="gift-front">
-                        <div class="ribbon-h"></div><div class="ribbon-v"></div><div class="bow">🎀</div>
-                        <div class="gift-label">Surprise #1</div>
-                    </div>
-                    <div class="gift-back">
-                        <div class="gift-icon">💆‍♀️</div>
-                        <h3 class="gift-title">Free Massage</h3>
-                        <p class="gift-description">Relax and let me take care of you with a soothing massage whenever you need it!</p>
-                        <div class="coupon">
-                            <div class="coupon-title">💆 Relaxation Voucher</div>
-                            <div class="coupon-value">Unlimited uses • No expiration</div>
-                        </div>
-                        <div class="gift-message">"Because you deserve to feel pampered and loved 🥰"</div>
-                    </div>
+<div class="music-controls">
+    <button id="musicToggle">🔊</button>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="Ishq-Hai.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+    <div class="page-title">
+        <h1>🎁 Your Surprises Await</h1>
+        <p style="color:white;opacity:0.8;">Tap each gift to unwrap 💕</p>
+    </div>
+
+    <div class="gifts-grid">
+        <!-- DUPLICATE THIS BLOCK FOR EACH GIFT -->
+        <div class="gift-box" onclick="openGift(this)">
+            <div class="gift-inner">
+                <div class="gift-front">
+                    <div class="ribbon-h"></div>
+                    <div class="ribbon-v"></div>
+                    <div class="bow">🎀</div>
+                </div>
+                <div class="gift-back">
+                    <div class="gift-icon">💆‍♀️</div>
+                    <h3 class="gift-title">Free Massage</h3>
+                    <p class="gift-description">Relax — this one’s on me.</p>
+                    <div class="coupon">Unlimited • No expiry</div>
+                    <div class="gift-message">“You deserve this 💕”</div>
                 </div>
             </div>
-
-            <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
-                    <div class="gift-front">
-                        <div class="ribbon-h"></div><div class="ribbon-v"></div><div class="bow">🎀</div>
-                        <div class="gift-label">Surprise #2</div>
-                    </div>
-                    <div class="gift-back">
-                        <div class="gift-icon">☕</div>
-                        <h3 class="gift-title">Coffee Date</h3>
-                        <p class="gift-description">Let's grab your favorite coffee and spend quality time together.</p>
-                        <div class="coupon">
-                            <div class="coupon-title">☕ Caffeine Pass</div>
-                            <div class="coupon-value">Any café • Your drink is on me</div>
-                        </div>
-                        <div class="gift-message">"Coffee, conversations, and you 💕"</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
-                    <div class="gift-front">
-                        <div class="ribbon-h"></div><div class="ribbon-v"></div><div class="bow">🎀</div>
-                        <div class="gift-label">Surprise #3</div>
-                    </div>
-                    <div class="gift-back">
-                        <div class="gift-icon">💐</div>
-                        <h3 class="gift-title">Handmade Bouquet</h3>
-                        <p class="gift-description">A bouquet I’ll make just for you, with my own hands.</p>
-                        <div class="coupon">
-                            <div class="coupon-title">💐 Flower Voucher</div>
-                            <div class="coupon-value">Handmade with love</div>
-                        </div>
-                        <div class="gift-message">"Your smile is my favorite flower 🌹"</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gift-box" onclick="openGift(this)">
-                <div class="gift-inner">
-                    <div class="gift-front">
-                        <div class="ribbon-h"></div><div class="ribbon-v"></div><div class="bow">🎀</div>
-                        <div class="gift-label">Surprise #4</div>
-                    </div>
-                    <div class="gift-back">
-                        <div class="gift-icon">🎬</div>
-                        <h3 class="gift-title">Movie Date Night</h3>
-                        <p class="gift-description">Movie, popcorn, and cuddles at AMC South Lake.</p>
-                        <div class="coupon">
-                            <div class="coupon-title">🎟️ Movie Night for Two</div>
-                            <div class="coupon-value">Any movie you want</div>
-                        </div>
-                        <div class="gift-message">"I’ll share my popcorn with you ❤️"</div>
-                    </div>
-                </div>
-            </div>
-           <!-- ================= GIFT 5 ================= -->
-            <div class="gift-box" onclick="openGift(this)">
-              <div class="gift-inner">
-            
-                <div class="gift-front">
-                  <div class="tap-hint">Tap to open 🎁</div>
-                  <div class="ribbon-h"></div>
-                  <div class="ribbon-v"></div>
-                  <div class="bow">🎀</div>
-                  <div class="gift-label">Surprise #5</div>
-                </div>
-            
-                <div class="gift-back">
-                  <div class="gift-icon">🍝</div>
-                  <h3 class="gift-title">Home Cooked Meal</h3>
-                  <p class="gift-description">
-                    Anything you crave — cooked with love.
-                  </p>
-                  <div class="coupon">
-                    <div class="coupon-title">👨‍🍳 Chef’s Special</div>
-                    <div class="coupon-value">Your choice</div>
-                  </div>
-                  <div class="gift-message">
-                    "Tell me what you’re craving 💕"
-                  </div>
-                </div>
-            
-              </div>
-            </div>
-            
-            <!-- ================= GIFT 6 ================= -->
-            <div class="gift-box" onclick="openGift(this)">
-              <div class="gift-inner">
-            
-                <div class="gift-front">
-                  <div class="tap-hint">Tap to open 🎁</div>
-                  <div class="ribbon-h"></div>
-                  <div class="ribbon-v"></div>
-                  <div class="bow">🎀</div>
-                  <div class="gift-label">Surprise #6</div>
-                </div>
-            
-                <div class="gift-back">
-                  <div class="gift-icon">✨</div>
-                  <h3 class="gift-title">One Day of YES!</h3>
-                  <p class="gift-description">
-                    One full day where the answer is always YES.
-                  </p>
-                  <div class="coupon">
-                    <div class="coupon-title">👑 Your Wish</div>
-                    <div class="coupon-value">24 hours of YES</div>
-                  </div>
-                  <div class="gift-message">
-                    "Careful… this one is powerful 😘"
-                  </div>
-                </div>
-            
-              </div>
-            </div>
-
-        <div class="progress-section">
-            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-            <p id="openedCountText" style="color: #e8b4bc; margin-top: 10px; font-family: 'Dancing Script', cursive; font-size: 1.5rem;">0 of 6 gifts opened!</p>
         </div>
     </div>
 
-    <div class="music-controls"><button id="musicToggle">🔊</button></div>
-    <audio id="bgMusic" loop><source src="Ishq-Hai.mp3" type="audio/mpeg"></audio>
+    <div class="progress-section">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="openedCountText" style="color:var(--rose);font-family:'Dancing Script',cursive;">0 of 6 gifts opened</p>
+    </div>
+</div>
 
-    <script>
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicToggle');
-        musicBtn.addEventListener('click', () => {
-            if (bgMusic.paused) { bgMusic.play(); musicBtn.textContent = '🔊'; }
-            else { bgMusic.pause(); musicBtn.textContent = '🔇'; }
-        });
+<script>
+const bgMusic = document.getElementById('bgMusic');
+const musicToggle = document.getElementById('musicToggle');
 
-        let openedGifts = 0;
-        function openGift(giftBox) {
-            if (!giftBox.classList.contains('opened')) {
-                giftBox.classList.add('opened');
-                openedGifts++;
-                document.getElementById('progressFill').style.width = (openedGifts / 6) * 100 + '%';
-                document.getElementById('openedCountText').textContent = openedGifts + " of 6 gifts opened!";
-                if (openedGifts === 6) document.getElementById('openedCountText').textContent = "🎉 All gifts opened! You are so loved! 💕";
-                if(bgMusic.paused) bgMusic.play();
-            }
-        }
+musicToggle.addEventListener('click', () => {
+    if (bgMusic.paused) {
+        bgMusic.play();
+        musicToggle.textContent = '🔊';
+    } else {
+        bgMusic.pause();
+        musicToggle.textContent = '🔇';
+    }
+});
 
-        const sparklesContainer = document.getElementById('sparkles');
-        for (let i = 0; i < 50; i++) {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.style.left = Math.random() * 100 + '%';
-            sparkle.style.top = Math.random() * 100 + '%';
-            sparkle.style.animationDelay = Math.random() * 2 + 's';
-            sparklesContainer.appendChild(sparkle);
-        }
-    </script>
+let opened = 0;
+function openGift(el) {
+    if (!el.classList.contains('opened')) {
+        el.classList.add('opened');
+        opened++;
+        document.getElementById('progressFill').style.width = (opened/6)*100 + '%';
+        document.getElementById('openedCountText').textContent = `${opened} of 6 gifts opened`;
+        if (bgMusic.paused) bgMusic.play();
+    }
+}
+
+const sparkles = document.getElementById('sparkles');
+for (let i = 0; i < 50; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = Math.random()*2+'s';
+    sparkles.appendChild(s);
+}
+</script>
+
 </body>
 </html>
